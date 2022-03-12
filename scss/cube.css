@@ -1,0 +1,79 @@
+.container {
+  width: 200px;
+  height: 200px;
+  -webkit-perspective: 1000px;
+          perspective: 1000px;
+  margin: 170px auto 0;
+}
+
+.cube {
+  -webkit-transform-style: preserve-3d;
+          transform-style: preserve-3d;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  -webkit-animation: spin 15s infinite linear;
+          animation: spin 15s infinite linear;
+}
+
+.face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: repeating-linear-gradient(0deg, #686a77 0px, #686a77 1px, transparent 1px, transparent 21px), repeating-linear-gradient(90deg, #686a77 0px, #686a77 1px, transparent 1px, transparent 21px), -webkit-gradient(linear, left top, right top, from(#686a77), to(#686a77));
+  background-image: repeating-linear-gradient(0deg, #686a77 0px, #686a77 1px, transparent 1px, transparent 21px), repeating-linear-gradient(90deg, #686a77 0px, #686a77 1px, transparent 1px, transparent 21px), linear-gradient(90deg, #686a77, #686a77);
+  border: 1px solid black;
+}
+
+.top {
+  -webkit-transform: rotateX(90deg) translateZ(100px);
+          transform: rotateX(90deg) translateZ(100px);
+}
+
+.bottom {
+  -webkit-transform: rotateX(-90deg) translateZ(100px);
+          transform: rotateX(-90deg) translateZ(100px);
+}
+
+.right {
+  -webkit-transform: rotateY(90deg) translateZ(100px);
+          transform: rotateY(90deg) translateZ(100px);
+}
+
+.left {
+  -webkit-transform: rotateY(-90deg) translateZ(100px);
+          transform: rotateY(-90deg) translateZ(100px);
+}
+
+.front {
+  -webkit-transform: rotateX(0deg) translateZ(100px);
+          transform: rotateX(0deg) translateZ(100px);
+}
+
+.back {
+  -webkit-transform: rotateX(-180deg) translateZ(100px);
+          transform: rotateX(-180deg) translateZ(100px);
+}
+
+@-webkit-keyframes spin {
+  from {
+    -webkit-transform: rotateX(0deg) rotateY(0deg);
+            transform: rotateX(0deg) rotateY(0deg);
+  }
+  to {
+    -webkit-transform: rotateX(360deg) rotateY(360deg);
+            transform: rotateX(360deg) rotateY(360deg);
+  }
+}
+
+@keyframes spin {
+  from {
+    -webkit-transform: rotateX(0deg) rotateY(0deg);
+            transform: rotateX(0deg) rotateY(0deg);
+  }
+  to {
+    -webkit-transform: rotateX(360deg) rotateY(360deg);
+            transform: rotateX(360deg) rotateY(360deg);
+  }
+}
+/*# sourceMappingURL=cube.css.map */
