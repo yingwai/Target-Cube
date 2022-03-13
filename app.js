@@ -577,49 +577,49 @@ function levelKill1() {
     setInterval(kill1, 10000);
 }
 
-// function levelKill2() {
-//     function kill2() {
-//         if (level___2 === 2) {
-//             cubeKill.click()
-//             money.innerHTML = `${strMoney}`
-//         }
-//     }
+function levelKill2() {
+    function kill2() {
+        if (level___2 === 2) {
+            cubeKill.click()
+            money.innerHTML = `${strMoney}`
+        }
+    }
 
-//     setInterval(kill2, 7000);
-// }
+    setInterval(kill2, 7000);
+}
 
-// function levelKill3() {
-//     function kill3() {
-//         if (level___2 === 3) {
-//             cubeKill.click()
-//             money.innerHTML = `${strMoney}`
-//         }
-//     }
+function levelKill3() {
+    function kill3() {
+        if (level___2 === 3) {
+            cubeKill.click()
+            money.innerHTML = `${strMoney}`
+        }
+    }
 
-//     setInterval(kill3, 5000);
-// }
+    setInterval(kill3, 5000);
+}
 
-// function levelKill4() {
-//     function kill4() {
-//         if (level___2 === 4) {
-//             cubeKill.click()
-//             money.innerHTML = `${strMoney}`
-//         }
-//     }
+function levelKill4() {
+    function kill4() {
+        if (level___2 === 4) {
+            cubeKill.click()
+            money.innerHTML = `${strMoney}`
+        }
+    }
 
-//     setInterval(kill4, 3000);
-// }
+    setInterval(kill4, 3000);
+}
 
-// function levelKill5() {
-//     function kill5() {
-//         if (level___2 === 'max') {
-//             cubeKill.click()
-//             money.innerHTML = `${strMoney}`
-//         }
-//     }
+function levelKill5() {
+    function kill5() {
+        if (level___2 === 'max') {
+            cubeKill.click()
+            money.innerHTML = `${strMoney}`
+        }
+    }
 
-//     setInterval(kill5, 1000);
-// }
+    setInterval(kill5, 1000);
+}
 
 // Добавление списка магазина
 store.innerHTML = `
