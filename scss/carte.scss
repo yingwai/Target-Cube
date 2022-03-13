@@ -1,0 +1,89 @@
+.carte {
+    position: relative;
+    
+    .menu {
+        background-color: rgb(183, 194, 212);
+        border-radius: 10px 10px 0 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        transition: all 1s ease-in;
+
+        &.close {
+            height: 3rem;
+            width: 500px;
+
+            .menuimg {
+                position: absolute;
+            }
+        }
+
+        &.open {
+            height: 400px;
+            width: 500px;
+            
+
+            .menuimg {
+                transition: transform 1s ease-in;
+                transform: rotate(180deg);
+                width: 100%;
+            }
+        }
+
+        .menuimg {
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            width: 100%;
+
+            img {
+                height: 25px;
+                margin: 0 auto;
+            }
+        }
+
+        .store {
+            border-top: 1px solid black;
+            width: 100%;
+            flex-grow: 1;
+            overflow: hidden;
+            opacity: 0;
+            z-index: -1;
+
+            .title-store {
+                text-align: center;
+                padding: 10px;
+                border-bottom: 1px dashed black;
+            }
+
+            .item {
+                padding: 5px 10px;
+                border-bottom: 1px dashed black;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                cursor: pointer;
+
+                h3 {
+                    margin-bottom: 5px;
+                }
+            }
+        }
+        
+        .info {
+            border-top: 1px solid black;
+            width: 100%;
+            height: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px 0 30px;
+            overflow: hidden;
+            opacity: 0;
+            z-index: -1;
+        }
+
+        
+    }
+}

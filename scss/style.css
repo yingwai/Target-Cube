@@ -1,4 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa&display=swap");
 @import url(cube.scss);
+@import url(carte.scss);
 *,
 ::before,
 ::after {
@@ -10,5 +12,20 @@
 
 body {
   background: #2e2e39;
+  height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  font-family: 'Comfortaa', cursive;
 }
 /*# sourceMappingURL=style.css.map */
