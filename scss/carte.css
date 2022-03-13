@@ -1,5 +1,5 @@
 .carte {
-  position: relative;
+  width: 80%;
 }
 
 .carte .menu {
@@ -18,11 +18,11 @@
   position: relative;
   -webkit-transition: all 1s ease-in;
   transition: all 1s ease-in;
+  width: 100%;
 }
 
 .carte .menu.close {
   height: 3rem;
-  width: 500px;
 }
 
 .carte .menu.close .menuimg {
@@ -30,8 +30,15 @@
 }
 
 .carte .menu.open {
-  height: 400px;
-  width: 500px;
+  height: 45vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  background-color: #b7c2d4;
 }
 
 .carte .menu.open .menuimg {
@@ -61,6 +68,7 @@
 }
 
 .carte .menu .store {
+  background-color: #b7c2d4;
   border-top: 1px solid black;
   width: 100%;
   -webkit-box-flex: 1;
@@ -78,6 +86,7 @@
 }
 
 .carte .menu .store .item {
+  background-color: #b7c2d4;
   padding: 5px 10px;
   border-bottom: 1px dashed black;
   display: -webkit-box;
@@ -98,6 +107,7 @@
 }
 
 .carte .menu .info {
+  background-color: #b7c2d4;
   border-top: 1px solid black;
   width: 100%;
   height: 3rem;

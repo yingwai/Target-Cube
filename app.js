@@ -41,7 +41,7 @@ let money = document.querySelector('.money')
 
 // Счётчик денег
 let cent = 00
-let bucks = 10
+let bucks = 00
 let thousand = 0
 let million = 0
 let billion = 0
@@ -95,16 +95,16 @@ cube.addEventListener('click', () => {
 
 // Увеличение
 let skill___1 = document.querySelector('.skill___1')
-let price___1 = `$5`
+let price___1 = `$15`
 let level___1 = 0
 
 // Покупака увеличения
 function buy1(event) {
     if (level___1 === 0) {
-        if (bucks >= 5) {
+        if (bucks >= 15) {
             level___1++
-            bucks -= 5
-            price___1 = `$10`
+            bucks -= 15
+            price___1 = `$30`
             sumCent = 30
 
             for (let i = 0; i < 1; i++) {
@@ -145,10 +145,10 @@ function buy1(event) {
             alert('Нехватает денег.')
         }
     } else if (level___1 === 1) {
-        if (bucks >= 10) {
+        if (bucks >= 30) {
             level___1++
-            bucks -= 10
-            price___1 = `$15`
+            bucks -= 30
+            price___1 = `$70`
             sumCent = 60
 
             for (let i = 0; i < 1; i++) {
@@ -189,10 +189,10 @@ function buy1(event) {
             alert('Нехватает денег.')
         }
     } else if (level___1 === 2) {
-        if (bucks >= 15) {
+        if (bucks >= 70) {
             level___1++
-            bucks -= 15
-            price___1 = `$20`
+            bucks -= 70
+            price___1 = `$120`
             sumBucks = 1
             sumCent = 0
 
@@ -234,10 +234,10 @@ function buy1(event) {
             alert('Нехватает денег.')
         }
     } else if (level___1 === 3) {
-        if (bucks >= 20) {
+        if (bucks >= 120) {
             level___1++
-            bucks -= 20
-            price___1 = `$25`
+            bucks -= 120
+            price___1 = `$180`
             sumBucks = 1
             sumCent = 30
 
@@ -279,9 +279,9 @@ function buy1(event) {
             alert('Нехватает денег.')
         }
     } else if (level___1 === 4) {
-        if (bucks >= 25) {
+        if (bucks >= 180) {
             level___1 = 'max'
-            bucks -= 25
+            bucks -= 180
             price___1 = 'Не продайтся.'
             sumBucks = 1
             sumCent = 60
@@ -330,15 +330,15 @@ function buy1(event) {
 
 // Автоклик
 let skill___2 = document.querySelector('.skill___2')
-let price___2 = `$10`
+let price___2 = `$30`
 let level___2 = 0
 
 function buy2(event) {
     if (level___2 === 0) {
-        if (bucks >= 10) {
+        if (bucks >= 30) {
             level___2++
-            bucks -= 10
-            price___2 = `$15`
+            bucks -= 30
+            price___2 = `$100`
 
             for (let i = 0; i < 1; i++) {
                 if (billion != 0) {
@@ -380,10 +380,10 @@ function buy2(event) {
             alert('Нехватает денег.')
         }
     } else if (level___2 === 1) {
-        if (bucks >= 15) {
+        if (bucks >= 100) {
             level___2++
-            bucks -= 15
-            price___2 = `$20`
+            bucks -= 100
+            price___2 = `$200`
 
             for (let i = 0; i < 1; i++) {
                 if (billion != 0) {
@@ -425,10 +425,10 @@ function buy2(event) {
             alert('Нехватает денег.')
         }
     } else if (level___2 === 2) {
-        if (bucks >= 20) {
+        if (bucks >= 200) {
             level___2++
-            bucks -= 20
-            price___2 = `$25`
+            bucks -= 200
+            price___2 = `$350`
 
             for (let i = 0; i < 1; i++) {
                 if (billion != 0) {
@@ -470,10 +470,10 @@ function buy2(event) {
             alert('Нехватает денег.')
         }
     } else if (level___2 === 3) {
-        if (bucks >= 25) {
+        if (bucks >= 350) {
             level___2++
-            bucks -= 25
-            price___2 = `$30`
+            bucks -= 350
+            price___2 = `$500`
 
             for (let i = 0; i < 1; i++) {
                 if (billion != 0) {
@@ -515,9 +515,9 @@ function buy2(event) {
             alert('Нехватает денег.')
         }
     } else if (level___2 === 4) {
-        if (bucks >= 30) {
+        if (bucks >= 500) {
             level___2 = 'max'
-            bucks -= 30
+            bucks -= 500
             price___2 = 'Не продайтся.'
 
             for (let i = 0; i < 1; i++) {
