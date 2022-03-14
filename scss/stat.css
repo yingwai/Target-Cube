@@ -1,0 +1,122 @@
+.status {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.status .info {
+  background-color: #b7c2d4;
+  border-radius: 0 0 10px 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding: 10px;
+  width: 80%;
+}
+
+.status .info .diamond {
+  margin-right: 30px;
+}
+
+.status .info img {
+  height: 25px;
+  margin: 0 auto;
+  cursor: pointer;
+}
+
+.modal {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  -webkit-transition: background-color 0.3s ease-in;
+  transition: background-color 0.3s ease-in;
+  z-index: -1;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.modal .modal-menu {
+  background: #b7c2d4;
+  border-radius: 10px;
+  padding: 10px;
+  width: 300px;
+  height: 450px;
+  margin: 0 auto;
+  -webkit-transform: translateY(200px);
+          transform: translateY(200px);
+  -webkit-transition: -webkit-transform 0.3s ease-in;
+  transition: -webkit-transform 0.3s ease-in;
+  transition: transform 0.3s ease-in;
+  transition: transform 0.3s ease-in, -webkit-transform 0.3s ease-in;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  z-index: -1;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.modal .modal-menu .pause {
+  font-size: 1.5rem;
+}
+
+.modal .modal-menu .list-input {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.modal .modal-menu .list-input input {
+  margin: 10px;
+  height: 35px;
+  width: 80%;
+  outline: none;
+  border: 1px solid black;
+  border-radius: 5px;
+  background: #9fa8b8;
+  font-family: 'Comfortaa';
+  font-style: 2rem;
+  cursor: pointer;
+}
+
+.modal .modal-menu .version {
+  color: #8a8a8a;
+}
+/*# sourceMappingURL=stat.css.map */

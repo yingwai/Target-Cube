@@ -4,6 +4,42 @@ let menuimg = document.querySelector('.menuimg')
 let store = document.querySelector('.store')
 let info = document.querySelector('.info')
 
+// Окно настройки
+let gear = document.querySelector('.gear')
+let modal = document.querySelector('.modal')
+let modalMenu = document.querySelector('.modal-menu')
+let gearBtn = document.querySelectorAll('.gear-input')
+
+// Вызов окна настройки
+gear.addEventListener('click', () => {
+    modal.style.zIndex = '1000'
+    modal.style.opacity = '1'
+    modal.style.overflow = 'visible'
+
+    modalMenu.style.zIndex = '1000'
+    modalMenu.style.opacity = '1'
+    modalMenu.style.overflow = 'visible'
+})
+
+// Кнопочки
+for (let i = 0; i < gearBtn.length; i++) {
+    gearBtn[i].addEventListener('click', () => {
+        if (gearBtn[0].value === 'Продолжить') {
+            modal.style.zIndex = '-1'
+            modal.style.opacity = '0'
+            modal.style.overflow = 'hidden'
+
+            modalMenu.style.zIndex = '-1'
+            modalMenu.style.opacity = '0'
+            modalMenu.style.overflow = 'hidden'
+        } else if (gearBtn[i].value === 'Настройки') {
+            console.log('hi')
+        } else if (gearBtn[i].value === 'Сбросить прогресс') {
+            console.log('hi')
+        }
+    })
+}
+
 // Генератор меню
 menu.classList.add('close')
 
@@ -12,14 +48,10 @@ menuimg.addEventListener('click', () => {
     if (menu.classList.contains('close')) {
         menu.classList.add('open')
         menu.classList.remove('close')
-    
+
         store.style.overflow = 'visible'
         store.style.opacity = '1'
         store.style.zIndex = '1000'
-    
-        info.style.overflow = 'visible'
-        info.style.opacity = '1'
-        info.style.zIndex = '1000'
     } else if (menu.classList.contains('open')) {
         menu.classList.add('close')
         menu.classList.remove('open')
@@ -27,10 +59,6 @@ menuimg.addEventListener('click', () => {
         store.style.overflow = 'hidden'
         store.style.opacity = '0'
         store.style.zIndex = '-1'
-
-        info.style.overflow = 'hidden'
-        info.style.opacity = '0'
-        info.style.zIndex = '-1'
     }
 })
 
@@ -41,7 +69,7 @@ let money = document.querySelector('.money')
 
 // Счётчик денег
 let cent = 00
-let bucks = 00
+let bucks = 0
 let thousand = 0
 let million = 0
 let billion = 0
@@ -50,36 +78,35 @@ let billion = 0
 let strMoney = `$${bucks},${cent}`
 
 // Рисование нижнего меню
-reborn.innerHTML = `Reborning: 0`
+reborn.innerHTML = `Rebirth: 0`
 money.innerHTML = `${strMoney}`
 
 // Количество получаемых денег
 let sumCent = 10
 let sumBucks = 0
 
+// Рисование денег в зависимости от их количества
+function checkMoney() {
+    if (billion != 0) {
+        strMoney = `$${billion}.${million}.${thousand}.${bucks},${cent}`
+    } else if (million != 0) {
+        strMoney = `$${million}.${thousand}.${bucks},${cent}`
+    } else if (thousand != 0) {
+        strMoney = `$${thousand}.${bucks},${cent}`
+    } else {
+        strMoney = `$${bucks},${cent}`
+    }
+    money.innerHTML = `${strMoney}`
+}
+
 // Клик по кубу
 cube.addEventListener('click', () => {
     bucks += sumBucks
     cent += sumCent
 
-    // Рисование нижнего меню в зависимости от количества денег
-    for (let i = 0; i < 1; i++) {
-        if (billion != 0) {
-            strMoney = `$${billion}.${million}.${thousand}.${bucks},${cent}`
-        } else if (million != 0) {
-            strMoney = `$${million}.${thousand}.${bucks},${cent}`
-        } else if (thousand != 0) {
-            strMoney = `$${thousand}.${bucks},${cent}`
-        } else {
-            strMoney = `$${bucks},${cent}`
-        }
-        money.innerHTML = `${strMoney}`
-    }
-
-
     // Добавления нового значения
     if (cent >= 100) {
-        cent = 00
+        cent = 0
         bucks += 1
     } else if (bucks >= 1000) {
         bucks = 0
@@ -91,7 +118,34 @@ cube.addEventListener('click', () => {
         million = 0
         billion += 1
     }
+
+    checkMoney()
 })
+
+// Рисование магазин листа
+function drawStoreList() {
+    store.innerHTML = `
+                    <div class="title-store">
+                        <h2>Магазин</h2>
+                    </div>
+                    <div class="item" onclick="buy1(event)">
+                        <h3>Увеличение</h3>
+                        <p>Увеличивает количество получаемых денег за клик.</p>
+
+                        <br>
+
+                        <p>Цена: ${price___1} Уровень: ${level___1}</p>
+                    </div>
+                    
+                    <div class="item" onclick="buy2(event)">
+                        <h3>Автоклик</h3>
+                        <p>Автоматически кликает на куб раз в 10 секунд.</p>
+                        
+                        <br>
+                        
+                        <p>Цена: ${price___2} Уровень: ${level___2}</p>
+                    </div>`
+}
 
 // Увеличение
 let skill___1 = document.querySelector('.skill___1')
@@ -107,40 +161,9 @@ function buy1(event) {
             price___1 = `$30`
             sumCent = 30
 
-            for (let i = 0; i < 1; i++) {
-                if (billion != 0) {
-                    strMoney = `$${billion}.${million}.${thousand}.${bucks},${cent}`
-                } else if (million != 0) {
-                    strMoney = `$${million}.${thousand}.${bucks},${cent}`
-                } else if (thousand != 0) {
-                    strMoney = `$${thousand}.${bucks},${cent}`
-                } else {
-                    strMoney = `$${bucks},${cent}`
-                }
-                money.innerHTML = `${strMoney}`
+            checkMoney()
 
-                store.innerHTML = `
-                    <div class="title-store">
-                        <h2>Магазин</h2>
-                    </div>
-                    <div class="item" onclick="buy1(event)">
-                        <h3>Увеличение</h3>
-                        <p>Увеличивает количество получаемых денег за клик.</p>
-
-                        <br>
-
-                        <p>Цена: ${price___1} Уровень: ${level___1}</p>
-                    </div>
-                    
-                    <div class="item" onclick="buy2(event)">
-                        <h3>Автоклик</h3>
-                        <p>Автоматически кликает на куб раз в 10 секунд.</p>
-                        
-                        <br>
-                        
-                        <p>Цена: ${price___2} Уровень: ${level___2}</p>
-                    </div>`
-            }
+            drawStoreList()
         } else {
             alert('Нехватает денег.')
         }
@@ -151,40 +174,9 @@ function buy1(event) {
             price___1 = `$70`
             sumCent = 60
 
-            for (let i = 0; i < 1; i++) {
-                if (billion != 0) {
-                    strMoney = `$${billion}.${million}.${thousand}.${bucks},${cent}`
-                } else if (million != 0) {
-                    strMoney = `$${million}.${thousand}.${bucks},${cent}`
-                } else if (thousand != 0) {
-                    strMoney = `$${thousand}.${bucks},${cent}`
-                } else {
-                    strMoney = `$${bucks},${cent}`
-                }
-                money.innerHTML = `${strMoney}`
+            checkMoney()
 
-                store.innerHTML = `
-                    <div class="title-store">
-                        <h2>Магазин</h2>
-                    </div>
-                    <div class="item" onclick="buy1(event)">
-                        <h3>Увеличение</h3>
-                        <p>Увеличивает количество получаемых денег за клик.</p>
-
-                        <br>
-
-                        <p>Цена: ${price___1} Уровень: ${level___1}</p>
-                    </div>
-                    
-                    <div class="item" onclick="buy2(event)">
-                        <h3>Автоклик</h3>
-                        <p>Автоматически кликает на куб раз в 10 секунд.</p>
-                        
-                        <br>
-                        
-                        <p>Цена: ${price___2} Уровень: ${level___2}</p>
-                    </div>`
-            }
+            drawStoreList()
         } else {
             alert('Нехватает денег.')
         }
@@ -196,40 +188,9 @@ function buy1(event) {
             sumBucks = 1
             sumCent = 0
 
-            for (let i = 0; i < 1; i++) {
-                if (billion != 0) {
-                    strMoney = `$${billion}.${million}.${thousand}.${bucks},${cent}`
-                } else if (million != 0) {
-                    strMoney = `$${million}.${thousand}.${bucks},${cent}`
-                } else if (thousand != 0) {
-                    strMoney = `$${thousand}.${bucks},${cent}`
-                } else {
-                    strMoney = `$${bucks},${cent}`
-                }
-                money.innerHTML = `${strMoney}`
+            checkMoney()
 
-                store.innerHTML = `
-                    <div class="title-store">
-                        <h2>Магазин</h2>
-                    </div>
-                    <div class="item" onclick="buy1(event)">
-                        <h3>Увеличение</h3>
-                        <p>Увеличивает количество получаемых денег за клик.</p>
-
-                        <br>
-
-                        <p>Цена: ${price___1} Уровень: ${level___1}</p>
-                    </div>
-                    
-                    <div class="item" onclick="buy2(event)">
-                        <h3>Автоклик</h3>
-                        <p>Автоматически кликает на куб раз в 10 секунд.</p>
-                        
-                        <br>
-                        
-                        <p>Цена: ${price___2} Уровень: ${level___2}</p>
-                    </div>`
-            }
+            drawStoreList()
         } else {
             alert('Нехватает денег.')
         }
@@ -241,40 +202,9 @@ function buy1(event) {
             sumBucks = 1
             sumCent = 30
 
-            for (let i = 0; i < 1; i++) {
-                if (billion != 0) {
-                    strMoney = `$${billion}.${million}.${thousand}.${bucks},${cent}`
-                } else if (million != 0) {
-                    strMoney = `$${million}.${thousand}.${bucks},${cent}`
-                } else if (thousand != 0) {
-                    strMoney = `$${thousand}.${bucks},${cent}`
-                } else {
-                    strMoney = `$${bucks},${cent}`
-                }
-                money.innerHTML = `${strMoney}`
+            checkMoney()
 
-                store.innerHTML = `
-                    <div class="title-store">
-                        <h2>Магазин</h2>
-                    </div>
-                    <div class="item" onclick="buy1(event)">
-                        <h3>Увеличение</h3>
-                        <p>Увеличивает количество получаемых денег за клик.</p>
-
-                        <br>
-
-                        <p>Цена: ${price___1} Уровень: ${level___1}</p>
-                    </div>
-                    
-                    <div class="item" onclick="buy2(event)">
-                        <h3>Автоклик</h3>
-                        <p>Автоматически кликает на куб раз в 10 секунд.</p>
-                        
-                        <br>
-                        
-                        <p>Цена: ${price___2} Уровень: ${level___2}</p>
-                    </div>`
-            }
+            drawStoreList()
         } else {
             alert('Нехватает денег.')
         }
@@ -282,44 +212,13 @@ function buy1(event) {
         if (bucks >= 180) {
             level___1 = 'max'
             bucks -= 180
-            price___1 = 'Не продайтся.'
+            price___1 = 'Не продаётся.'
             sumBucks = 1
             sumCent = 60
 
-            for (let i = 0; i < 1; i++) {
-                if (billion != 0) {
-                    strMoney = `$${billion}.${million}.${thousand}.${bucks},${cent}`
-                } else if (million != 0) {
-                    strMoney = `$${million}.${thousand}.${bucks},${cent}`
-                } else if (thousand != 0) {
-                    strMoney = `$${thousand}.${bucks},${cent}`
-                } else {
-                    strMoney = `$${bucks},${cent}`
-                }
-                money.innerHTML = `${strMoney}`
+            checkMoney()
 
-                store.innerHTML = `
-                    <div class="title-store">
-                        <h2>Магазин</h2>
-                    </div>
-                    <div class="item" onclick="buy1(event)">
-                        <h3>Увеличение</h3>
-                        <p>Увеличивает количество получаемых денег за клик.</p>
-
-                        <br>
-
-                        <p>Цена: ${price___1} Уровень: ${level___1}</p>
-                    </div>
-                    
-                    <div class="item" onclick="buy2(event)">
-                        <h3>Автоклик</h3>
-                        <p>Автоматически кликает на куб раз в 10 секунд.</p>
-                        
-                        <br>
-                        
-                        <p>Цена: ${price___2} Уровень: ${level___2}</p>
-                    </div>`
-            }
+            drawStoreList()
         } else {
             alert('Нехватает денег.')
         }
@@ -340,42 +239,11 @@ function buy2(event) {
             bucks -= 30
             price___2 = `$100`
 
-            for (let i = 0; i < 1; i++) {
-                if (billion != 0) {
-                    strMoney = `$${billion}.${million}.${thousand}.${bucks},${cent}`
-                } else if (million != 0) {
-                    strMoney = `$${million}.${thousand}.${bucks},${cent}`
-                } else if (thousand != 0) {
-                    strMoney = `$${thousand}.${bucks},${cent}`
-                } else {
-                    strMoney = `$${bucks},${cent}`
-                }
-                money.innerHTML = `${strMoney}`
+            checkMoney()
 
-                store.innerHTML = `
-                    <div class="title-store">
-                        <h2>Магазин</h2>
-                    </div>
-                    <div class="item" onclick="buy1(event)">
-                        <h3>Увеличение</h3>
-                        <p>Увеличивает количество получаемых денег за клик.</p>
+            drawStoreList()
 
-                        <br>
-
-                        <p>Цена: ${price___1} Уровень: ${level___1}</p>
-                    </div>
-                    
-                    <div class="item" onclick="buy2(event)">
-                        <h3>Автоклик</h3>
-                        <p>Автоматически кликает на куб раз в 10 секунд.</p>
-                        
-                        <br>
-                        
-                        <p>Цена: ${price___2} Уровень: ${level___2}</p>
-                    </div>`
-
-                levelKill1()
-            }
+            levelKill1()
         } else {
             alert('Нехватает денег.')
         }
@@ -385,42 +253,11 @@ function buy2(event) {
             bucks -= 100
             price___2 = `$200`
 
-            for (let i = 0; i < 1; i++) {
-                if (billion != 0) {
-                    strMoney = `$${billion}.${million}.${thousand}.${bucks},${cent}`
-                } else if (million != 0) {
-                    strMoney = `$${million}.${thousand}.${bucks},${cent}`
-                } else if (thousand != 0) {
-                    strMoney = `$${thousand}.${bucks},${cent}`
-                } else {
-                    strMoney = `$${bucks},${cent}`
-                }
-                money.innerHTML = `${strMoney}`
+            checkMoney()
 
-                store.innerHTML = `
-                    <div class="title-store">
-                        <h2>Магазин</h2>
-                    </div>
-                    <div class="item" onclick="buy1(event)">
-                        <h3>Увеличение</h3>
-                        <p>Увеличивает количество получаемых денег за клик.</p>
+            drawStoreList()
 
-                        <br>
-
-                        <p>Цена: ${price___1} Уровень: ${level___1}</p>
-                    </div>
-                    
-                    <div class="item" onclick="buy2(event)">
-                        <h3>Автоклик</h3>
-                        <p>Автоматически кликает на куб раз в 10 секунд.</p>
-                        
-                        <br>
-                        
-                        <p>Цена: ${price___2} Уровень: ${level___2}</p>
-                    </div>`
-
-                levelKill2()
-            }
+            levelKill2()
         } else {
             alert('Нехватает денег.')
         }
@@ -430,42 +267,11 @@ function buy2(event) {
             bucks -= 200
             price___2 = `$350`
 
-            for (let i = 0; i < 1; i++) {
-                if (billion != 0) {
-                    strMoney = `$${billion}.${million}.${thousand}.${bucks},${cent}`
-                } else if (million != 0) {
-                    strMoney = `$${million}.${thousand}.${bucks},${cent}`
-                } else if (thousand != 0) {
-                    strMoney = `$${thousand}.${bucks},${cent}`
-                } else {
-                    strMoney = `$${bucks},${cent}`
-                }
-                money.innerHTML = `${strMoney}`
+            checkMoney()
 
-                store.innerHTML = `
-                    <div class="title-store">
-                        <h2>Магазин</h2>
-                    </div>
-                    <div class="item" onclick="buy1(event)">
-                        <h3>Увеличение</h3>
-                        <p>Увеличивает количество получаемых денег за клик.</p>
+            drawStoreList()
 
-                        <br>
-
-                        <p>Цена: ${price___1} Уровень: ${level___1}</p>
-                    </div>
-                    
-                    <div class="item" onclick="buy2(event)">
-                        <h3>Автоклик</h3>
-                        <p>Автоматически кликает на куб раз в 10 секунд.</p>
-                        
-                        <br>
-                        
-                        <p>Цена: ${price___2} Уровень: ${level___2}</p>
-                    </div>`
-
-                levelKill3()
-            }
+            levelKill3()
         } else {
             alert('Нехватает денег.')
         }
@@ -475,42 +281,11 @@ function buy2(event) {
             bucks -= 350
             price___2 = `$500`
 
-            for (let i = 0; i < 1; i++) {
-                if (billion != 0) {
-                    strMoney = `$${billion}.${million}.${thousand}.${bucks},${cent}`
-                } else if (million != 0) {
-                    strMoney = `$${million}.${thousand}.${bucks},${cent}`
-                } else if (thousand != 0) {
-                    strMoney = `$${thousand}.${bucks},${cent}`
-                } else {
-                    strMoney = `$${bucks},${cent}`
-                }
-                money.innerHTML = `${strMoney}`
+            checkMoney()
 
-                store.innerHTML = `
-                    <div class="title-store">
-                        <h2>Магазин</h2>
-                    </div>
-                    <div class="item" onclick="buy1(event)">
-                        <h3>Увеличение</h3>
-                        <p>Увеличивает количество получаемых денег за клик.</p>
+            drawStoreList()
 
-                        <br>
-
-                        <p>Цена: ${price___1} Уровень: ${level___1}</p>
-                    </div>
-                    
-                    <div class="item" onclick="buy2(event)">
-                        <h3>Автоклик</h3>
-                        <p>Автоматически кликает на куб раз в 10 секунд.</p>
-                        
-                        <br>
-                        
-                        <p>Цена: ${price___2} Уровень: ${level___2}</p>
-                    </div>`
-
-                levelKill4()
-            }
+            levelKill4()
         } else {
             alert('Нехватает денег.')
         }
@@ -518,44 +293,13 @@ function buy2(event) {
         if (bucks >= 500) {
             level___2 = 'max'
             bucks -= 500
-            price___2 = 'Не продайтся.'
+            price___2 = 'Не продаётся.'
 
-            for (let i = 0; i < 1; i++) {
-                if (billion != 0) {
-                    strMoney = `$${billion}.${million}.${thousand}.${bucks},${cent}`
-                } else if (million != 0) {
-                    strMoney = `$${million}.${thousand}.${bucks},${cent}`
-                } else if (thousand != 0) {
-                    strMoney = `$${thousand}.${bucks},${cent}`
-                } else {
-                    strMoney = `$${bucks},${cent}`
-                }
-                money.innerHTML = `${strMoney}`
+            checkMoney()
 
-                store.innerHTML = `
-                    <div class="title-store">
-                        <h2>Магазин</h2>
-                    </div>
-                    <div class="item" onclick="buy1(event)">
-                        <h3>Увеличение</h3>
-                        <p>Увеличивает количество получаемых денег за клик.</p>
+            drawStoreList()
 
-                        <br>
-
-                        <p>Цена: ${price___1} Уровень: ${level___1}</p>
-                    </div>
-                    
-                    <div class="item" onclick="buy2(event)">
-                        <h3>Автоклик</h3>
-                        <p>Автоматически кликает на куб раз в 10 секунд.</p>
-                        
-                        <br>
-                        
-                        <p>Цена: ${price___2} Уровень: ${level___2}</p>
-                    </div>`
-
-                levelKill5()
-            }
+            levelKill5()
         } else {
             alert('Нехватает денег.')
         }
@@ -571,7 +315,7 @@ function levelKill1() {
         if (level___2 === 1) {
             cubeKill.click()
             money.innerHTML = `${strMoney}`
-        } 
+        }
     }
 
     setInterval(kill1, 10000);
@@ -622,24 +366,4 @@ function levelKill5() {
 }
 
 // Добавление списка магазина
-store.innerHTML = `
-                <div class="title-store">
-                    <h2>Магазин</h2>
-                </div>
-                <div class="item" onclick="buy1(event)">
-                    <h3>Увеличение</h3>
-                    <p>Увеличивает количество получаемых денег за клик.</p>
-
-                    <br>
-
-                    <p>Цена: ${price___1} Уровень: ${level___1}</p>
-                </div>
-                
-                <div class="item" onclick="buy2(event)">
-                    <h3>Автоклик</h3>
-                    <p>Автоматически кликает на куб раз в 10 секунд.</p>
-                    
-                    <br>
-                    
-                    <p>Цена: ${price___2} Уровень: ${level___2}</p>
-                </div>`
+drawStoreList()
