@@ -61,7 +61,7 @@ menuimg.addEventListener('click', () => {
         store.style.zIndex = '-1'
     }
 })
-
+ 
 // Переменные нижнего меню
 let cube = document.querySelector('.container')
 let reborn = document.querySelector('.reborn')
