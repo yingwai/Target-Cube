@@ -25,5 +25,9 @@ body {
       -ms-flex-pack: justify;
           justify-content: space-between;
   font-family: 'Comfortaa', cursive;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 /*# sourceMappingURL=style.css.map */

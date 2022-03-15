@@ -3,6 +3,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 2;
 
     .info {
         background-color: rgb(183, 194, 212);
@@ -28,7 +29,7 @@
             height: 25px;
             margin: 0 auto;
             cursor: pointer;
-        } 
+        }
     }
 }
 
@@ -80,7 +81,7 @@
                 border: 1px solid black;
                 border-radius: 5px;
                 background: rgb(159, 168, 184);
-                font-family: 'Comfortaa';
+                font-family: "Comfortaa";
                 font-style: 2rem;
                 cursor: pointer;
             }

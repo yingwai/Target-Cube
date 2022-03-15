@@ -24,7 +24,7 @@ gear.addEventListener('click', () => {
 // Кнопочки
 for (let i = 0; i < gearBtn.length; i++) {
     gearBtn[i].addEventListener('click', () => {
-        if (gearBtn[0].value === 'Продолжить') {
+        if (gearBtn[i].value === 'Продолжить') {
             modal.style.zIndex = '-1'
             modal.style.opacity = '0'
             modal.style.overflow = 'hidden'
@@ -33,7 +33,7 @@ for (let i = 0; i < gearBtn.length; i++) {
             modalMenu.style.opacity = '0'
             modalMenu.style.overflow = 'hidden'
         } else if (gearBtn[i].value === 'Настройки') {
-            console.log('hi')
+            console.log('hello')
         } else if (gearBtn[i].value === 'Сбросить прогресс') {
             console.log('hi')
         }
@@ -51,7 +51,7 @@ menuimg.addEventListener('click', () => {
 
         store.style.overflow = 'visible'
         store.style.opacity = '1'
-        store.style.zIndex = '1000'
+        store.style.zIndex = '999'
     } else if (menu.classList.contains('open')) {
         menu.classList.add('close')
         menu.classList.remove('open')
@@ -61,63 +61,49 @@ menuimg.addEventListener('click', () => {
         store.style.zIndex = '-1'
     }
 })
- 
+
 // Переменные нижнего меню
-let cube = document.querySelector('.container')
+let clickZone = document.querySelector('.clickzone')
 let reborn = document.querySelector('.reborn')
 let money = document.querySelector('.money')
 
-// Счётчик денег
-let cent = 00
-let bucks = 0
-let thousand = 0
-let million = 0
-let billion = 0
-
-// Строка имеющихся денег
-let strMoney = `$${bucks},${cent}`
+let sumMoney = 0
+let sumInfo = `$0.00`
 
 // Рисование нижнего меню
 reborn.innerHTML = `Rebirth: 0`
-money.innerHTML = `${strMoney}`
+money.innerHTML = `${sumInfo}`
 
 // Количество получаемых денег
-let sumCent = 10
-let sumBucks = 0
+let sumNum = 10
+let sumLevel = 50
 
 // Рисование денег в зависимости от их количества
 function checkMoney() {
-    if (billion != 0) {
-        strMoney = `$${billion}.${million}.${thousand}.${bucks},${cent}`
-    } else if (million != 0) {
-        strMoney = `$${million}.${thousand}.${bucks},${cent}`
-    } else if (thousand != 0) {
-        strMoney = `$${thousand}.${bucks},${cent}`
-    } else {
-        strMoney = `$${bucks},${cent}`
+    if /* $1000000000 */ (sumMoney >= 100000000000) {
+        sumInfo = `$${(sumMoney / 100000000000).toFixed(2)}b`
+    } else if /* $1000000 */ (sumMoney >= 100000000) {
+        sumInfo = `$${(sumMoney / 100000000).toFixed(2)}m`
+    } else if /* $1000 */ (sumMoney >= 100000) {
+        sumInfo = `$${(sumMoney / 100000).toFixed(2)}k`
+    } else if /* $1 */ (sumMoney >= 100) {
+        sumInfo = `$${(sumMoney / 100).toFixed(2)}`
+    } else if /* $0.10 */ (sumMoney >= 10) {
+        sumInfo = `$0.${(sumMoney).toFixed(0)}`
+    } else /* $0 */ {
+        sumInfo = `$0.0${sumMoney}`
     }
-    money.innerHTML = `${strMoney}`
+
+    if (level___2 >= 1) {
+        sumMoney += sumLevel
+    }
+
+    money.innerHTML = `${sumInfo}`
 }
 
 // Клик по кубу
-cube.addEventListener('click', () => {
-    bucks += sumBucks
-    cent += sumCent
-
-    // Добавления нового значения
-    if (cent >= 100) {
-        cent = 0
-        bucks += 1
-    } else if (bucks >= 1000) {
-        bucks = 0
-        thousand += 1
-    } else if (thousand >= 1000) {
-        thousand = 0
-        million += 1
-    } else if (million >= 1000) {
-        million = 0
-        billion += 1
-    }
+clickZone.addEventListener('click', () => {
+    sumMoney += sumNum
 
     checkMoney()
 })
@@ -139,7 +125,7 @@ function drawStoreList() {
                     
                     <div class="item" onclick="buy2(event)">
                         <h3>Автоклик</h3>
-                        <p>Автоматически кликает на куб раз в 10 секунд.</p>
+                        <p></p>
                         
                         <br>
                         
@@ -148,18 +134,19 @@ function drawStoreList() {
 }
 
 // Увеличение
-let skill___1 = document.querySelector('.skill___1')
-let price___1 = `$15`
+let price___1sum = 1500
+let price___1 = `$${price___1sum / 100}`
 let level___1 = 0
 
 // Покупака увеличения
-function buy1(event) {
-    if (level___1 === 0) {
-        if (bucks >= 15) {
+function buy1() {
+    if (level___1 < 10) {
+        if (sumMoney >= price___1sum) {
             level___1++
-            bucks -= 15
-            price___1 = `$30`
-            sumCent = 30
+            sumMoney -= price___1sum
+            price___1sum = price___1sum + 1500
+            price___1 = `$${price___1sum / 100}`
+            sumNum += 10
 
             checkMoney()
 
@@ -167,12 +154,13 @@ function buy1(event) {
         } else {
             alert('Нехватает денег.')
         }
-    } else if (level___1 === 1) {
-        if (bucks >= 30) {
+    } else if (level___1 < 20) {
+        if (sumMoney >= price___1sum) {
             level___1++
-            bucks -= 30
-            price___1 = `$70`
-            sumCent = 60
+            sumMoney -= price___1sum
+            price___1sum = price___1sum + 3000
+            price___1 = `$${price___1sum / 100}`
+            sumNum += 25
 
             checkMoney()
 
@@ -180,13 +168,13 @@ function buy1(event) {
         } else {
             alert('Нехватает денег.')
         }
-    } else if (level___1 === 2) {
-        if (bucks >= 70) {
+    } else if (level___1 < 30) {
+        if (sumMoney >= price___1sum) {
             level___1++
-            bucks -= 70
-            price___1 = `$120`
-            sumBucks = 1
-            sumCent = 0
+            sumMoney -= price___1sum
+            price___1sum = price___1sum + 4500
+            price___1 = `$${price___1sum / 100}`
+            sumNum += 40
 
             checkMoney()
 
@@ -194,13 +182,13 @@ function buy1(event) {
         } else {
             alert('Нехватает денег.')
         }
-    } else if (level___1 === 3) {
-        if (bucks >= 120) {
+    } else if (level___1 < 40) {
+        if (sumMoney >= price___1sum) {
             level___1++
-            bucks -= 120
-            price___1 = `$180`
-            sumBucks = 1
-            sumCent = 30
+            sumMoney -= price___1sum
+            price___1sum = price___1sum + 6000
+            price___1 = `$${price___1sum / 100}`
+            sumNum += 55
 
             checkMoney()
 
@@ -208,13 +196,96 @@ function buy1(event) {
         } else {
             alert('Нехватает денег.')
         }
-    } else if (level___1 === 4) {
-        if (bucks >= 180) {
+    } else if (level___1 < 50) {
+        if (sumMoney >= price___1sum) {
+            level___1++
+            sumMoney -= price___1sum
+            price___1sum = price___1sum + 7500
+            price___1 = `$${price___1sum / 100}`
+            sumNum += 70
+
+            checkMoney()
+
+            drawStoreList()
+        } else {
+            alert('Нехватает денег.')
+        }
+    } else if (level___1 < 60) {
+        if (sumMoney >= price___1sum) {
+            level___1++
+            sumMoney -= price___1sum
+            price___1sum = price___1sum + 9000
+            price___1 = `$${price___1sum / 100}`
+            sumNum += 150
+
+            checkMoney()
+
+            drawStoreList()
+        } else {
+            alert('Нехватает денег.')
+        }
+    } else if (level___1 < 70) {
+        if (sumMoney >= price___1sum) {
+            level___1++
+            sumMoney -= price___1sum
+            price___1sum = price___1sum + 10000
+            price___1 = `$${price___1sum / 100}`
+            sumNum += 200
+
+            checkMoney()
+
+            drawStoreList()
+        } else {
+            alert('Нехватает денег.')
+        }
+    } else if (level___1 < 80) {
+        if (sumMoney >= price___1sum) {
+            level___1++
+            sumMoney -= price___1sum
+            price___1sum = price___1sum + 12000
+            price___1 = `$${price___1sum / 100}`
+            sumNum += 400
+
+            checkMoney()
+
+            drawStoreList()
+        } else {
+            alert('Нехватает денег.')
+        }
+    } else if (level___1 < 90) {
+        if (sumMoney >= price___1sum) {
+            level___1++
+            sumMoney -= price___1sum
+            price___1sum = price___1sum + 15000
+            price___1 = `$${price___1sum / 100}`
+            sumNum += 650
+
+            checkMoney()
+
+            drawStoreList()
+        } else {
+            alert('Нехватает денег.')
+        }
+    } else if (level___1 < 99) {
+        if (sumMoney >= price___1sum) {
+            level___1++
+            sumMoney -= price___1sum
+            price___1sum = price___1sum + 20000
+            price___1 = `$${price___1sum / 100}`
+            sumNum += 1500
+
+            checkMoney()
+
+            drawStoreList()
+        } else {
+            alert('Нехватает денег.')
+        }
+    } else if (level___1 < 100) {
+        if (sumMoney >= price___1sum) {
             level___1 = 'max'
-            bucks -= 180
-            price___1 = 'Не продаётся.'
-            sumBucks = 1
-            sumCent = 60
+            sumMoney -= price___1sum
+            price___1 = `Не продаётся`
+            sumNum += 1700
 
             checkMoney()
 
@@ -223,146 +294,310 @@ function buy1(event) {
             alert('Нехватает денег.')
         }
     } else if (level___1 === 'max') {
-        alert('Максимальное улучшение')
+        alert('Максимальный уровень')
     }
 }
 
 // Автоклик
-let skill___2 = document.querySelector('.skill___2')
-let price___2 = `$30`
+let price___2sum = 3000
+let price___2 = `$${price___2sum / 100}`
 let level___2 = 0
 
-function buy2(event) {
-    if (level___2 === 0) {
-        if (bucks >= 30) {
+let worker = [null, null, null, null, null, null, null, null, null]
+
+function buy2() {
+    if (level___2 < 10) {
+        if (sumMoney >= price___2sum) {
             level___2++
-            bucks -= 30
-            price___2 = `$100`
+            sumMoney -= price___2sum
+            price___2sum = price___2sum + 3000
+            price___2 = `$${price___2sum / 100}`
+
+            if (level___2 === 1) {
+                checkLevelKill()
+            } else if (level___2 > 1) {
+                sumLevel += 5
+            }
 
             checkMoney()
 
             drawStoreList()
-
-            levelKill1()
         } else {
             alert('Нехватает денег.')
         }
-    } else if (level___2 === 1) {
-        if (bucks >= 100) {
+    } else if (level___2 < 20) {
+        if (sumMoney >= price___2sum) {
             level___2++
-            bucks -= 100
-            price___2 = `$200`
+            sumMoney -= price___2sum
+            price___2sum = price___2sum + 5000
+            price___2 = `$${price___2sum / 100}`
+
+            if (level___2 === 11) {
+                clearInterval(worker[0])
+                checkLevelKill()
+            } else if (level___2 > 11) {
+                sumLevel += 10
+            }
 
             checkMoney()
 
             drawStoreList()
-
-            levelKill2()
         } else {
             alert('Нехватает денег.')
         }
-    } else if (level___2 === 2) {
-        if (bucks >= 200) {
+    } else if (level___2 < 30) {
+        if (sumMoney >= price___2sum) {
             level___2++
-            bucks -= 200
-            price___2 = `$350`
+            sumMoney -= price___2sum
+            price___2sum = price___2sum + 8000
+            price___2 = `$${price___2sum / 100}`
+
+            if (level___2 === 21) {
+                clearInterval(worker[1])
+                checkLevelKill()
+            } else if (level___2 > 21) {
+                sumLevel += 15
+            }
 
             checkMoney()
 
             drawStoreList()
-
-            levelKill3()
         } else {
             alert('Нехватает денег.')
         }
-    } else if (level___2 === 3) {
-        if (bucks >= 350) {
+    } else if (level___2 < 40) {
+        if (sumMoney >= price___2sum) {
             level___2++
-            bucks -= 350
-            price___2 = `$500`
+            sumMoney -= price___2sum
+            price___2sum = price___2sum + 10000
+            price___2 = `$${price___2sum / 100}`
+
+            if (level___2 === 31) {
+                clearInterval(worker[2])
+                checkLevelKill()
+            } else if (level___2 > 31) {
+                sumLevel += 20
+            }
 
             checkMoney()
 
             drawStoreList()
-
-            levelKill4()
         } else {
             alert('Нехватает денег.')
         }
-    } else if (level___2 === 4) {
-        if (bucks >= 500) {
+    } else if (level___2 < 50) {
+        if (sumMoney >= price___2sum) {
+            level___2++
+            sumMoney -= price___2sum
+            price___2sum = price___2sum + 12000
+            price___2 = `$${price___2sum / 100}`
+
+            if (level___2 === 41) {
+                clearInterval(worker[3])
+                checkLevelKill()
+            } else if (level___2 > 41) {
+                sumLevel += 25
+            }
+
+            checkMoney()
+
+            drawStoreList()
+        } else {
+            alert('Нехватает денег.')
+        }
+    } else if (level___2 < 60) {
+        if (sumMoney >= price___2sum) {
+            level___2++
+            sumMoney -= price___2sum
+            price___2sum = price___2sum + 15000
+            price___2 = `$${price___2sum / 100}`
+
+            if (level___2 === 51) {
+                clearInterval(worker[4])
+                checkLevelKill()
+            } else if (level___2 > 51) {
+                sumLevel += 30
+            }
+
+            checkMoney()
+
+            drawStoreList()
+        } else {
+            alert('Нехватает денег.')
+        }
+    } else if (level___2 < 70) {
+        if (sumMoney >= price___2sum) {
+            level___2++
+            sumMoney -= price___2sum
+            price___2sum = price___2sum + 17000
+            price___2 = `$${price___2sum / 100}`
+
+            if (level___2 === 61) {
+                clearInterval(worker[5])
+                checkLevelKill()
+            } else if (level___2 > 61) {
+                sumLevel += 35
+            }
+
+            checkMoney()
+
+            drawStoreList()
+        } else {
+            alert('Нехватает денег.')
+        }
+    } else if (level___2 < 80) {
+        if (sumMoney >= price___2sum) {
+            level___2++
+            sumMoney -= price___2sum
+            price___2sum = price___2sum + 20000
+            price___2 = `$${price___2sum / 100}`
+
+            if (level___2 === 71) {
+                clearInterval(worker[6])
+                checkLevelKill()
+            } else if (level___2 > 71) {
+                sumLevel += 40
+            }
+
+            checkMoney()
+
+            drawStoreList()
+        } else {
+            alert('Нехватает денег.')
+        }
+    } else if (level___2 < 90) {
+        if (sumMoney >= price___2sum) {
+            level___2++
+            sumMoney -= price___2sum
+            price___2sum = price___2sum + 25000
+            price___2 = `$${price___2sum / 100}`
+
+            if (level___2 === 81) {
+                clearInterval(worker[7])
+                checkLevelKill()
+            } else if (level___2 > 81) {
+                sumLevel += 50
+            }
+
+            checkMoney()
+
+            drawStoreList()
+        } else {
+            alert('Нехватает денег.')
+        }
+    } else if (level___2 < 99) {
+        if (sumMoney >= price___2sum) {
+            level___2++
+            sumMoney -= price___2sum
+            price___2sum = price___2sum + 20000
+            price___2 = `$${price___2sum / 100}`
+
+            if (level___2 === 91) {
+                clearInterval(worker[8])
+                checkLevelKill()
+            } else if (level___2 > 91) {
+                sumLevel += 60
+            }
+
+            checkMoney()
+
+            drawStoreList()
+        } else {
+            alert('Нехватает денег.')
+        }
+    } else if (level___2 < 100) {
+        if (sumMoney >= price___2sum) {
             level___2 = 'max'
-            bucks -= 500
-            price___2 = 'Не продаётся.'
+            sumMoney -= price___2sum
+            price___2 = `Не продаётся`
+
+            if (level___2 > 99) {
+                sumLevel += 70
+            }
 
             checkMoney()
 
             drawStoreList()
-
-            levelKill5()
         } else {
             alert('Нехватает денег.')
         }
     } else if (level___2 === 'max') {
-        alert('Максимальное улучшение')
+        alert('Максимальный уровень')
     }
 }
 
-cubeKill = document.querySelector('.container')
-
-function levelKill1() {
-    function kill1() {
-        if (level___2 === 1) {
-            cubeKill.click()
-            money.innerHTML = `${strMoney}`
+function checkLevelKill() {
+    if (level___2 === 1) {
+        function kill() {
+            checkMoney()
+            console.log('20s')
         }
-    }
 
-    setInterval(kill1, 10000);
-}
-
-function levelKill2() {
-    function kill2() {
-        if (level___2 === 2) {
-            cubeKill.click()
-            money.innerHTML = `${strMoney}`
+        worker[0] = setInterval(kill, 20000)
+    } else if (level___2 === 11) {
+        function kill() {
+            checkMoney()
+            console.log('18s')
         }
-    }
 
-    setInterval(kill2, 7000);
-}
-
-function levelKill3() {
-    function kill3() {
-        if (level___2 === 3) {
-            cubeKill.click()
-            money.innerHTML = `${strMoney}`
+        worker[1] = setInterval(kill, 18000)
+    } else if (level___2 === 21) {
+        function kill() {
+            checkMoney()
+            console.log('16s')
         }
-    }
 
-    setInterval(kill3, 5000);
-}
-
-function levelKill4() {
-    function kill4() {
-        if (level___2 === 4) {
-            cubeKill.click()
-            money.innerHTML = `${strMoney}`
+        worker[2] = setInterval(kill, 16000)
+    } else if (level___2 === 31) {
+        function kill() {
+            checkMoney()
+            console.log('14s')
         }
-    }
 
-    setInterval(kill4, 3000);
-}
-
-function levelKill5() {
-    function kill5() {
-        if (level___2 === 'max') {
-            cubeKill.click()
-            money.innerHTML = `${strMoney}`
+        worker[3] = setInterval(kill, 14000)
+    } else if (level___2 === 41) {
+        function kill() {
+            checkMoney()
+            console.log('12s')
         }
-    }
 
-    setInterval(kill5, 1000);
+        worker[4] = setInterval(kill, 12000)
+    } else if (level___2 === 51) {
+        function kill() {
+            checkMoney()
+            console.log('10s')
+        }
+
+        worker[5] = setInterval(kill, 10000)
+    } else if (level___2 === 61) {
+        function kill() {
+            checkMoney()
+            console.log('8s')
+        }
+
+        worker[6] = setInterval(kill, 8000)
+    } else if (level___2 === 71) {
+        function kill() {
+            checkMoney()
+            console.log('4s')
+        }
+
+        worker[7] = setInterval(kill, 4000)
+    } else if (level___2 === 81) {
+        function kill() {
+            checkMoney()
+            console.log('2s')
+        }
+
+        worker[8] = setInterval(kill, 2000)
+    } else if (level___2 === 81) {
+        function kill() {
+            checkMoney()
+            console.log('1s')
+        }
+
+        worker[9] = setInterval(kill, 1000)
+    }
 }
 
 // Добавление списка магазина
