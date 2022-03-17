@@ -9,7 +9,8 @@
 }
 
 body {
-  background: #2e2e39;
+  // background: #2e2e39;
+  background: #212529;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -17,4 +18,5 @@ body {
   justify-content: space-between;
   font-family: 'Comfortaa', cursive;
   user-select: none;
+  overflow-y: hidden;
 } 

@@ -9,7 +9,7 @@
 }
 
 body {
-  background: #2e2e39;
+  background: #212529;
   height: 100vh;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -29,5 +29,6 @@ body {
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+  overflow-y: hidden;
 }
 /*# sourceMappingURL=style.css.map */

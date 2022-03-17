@@ -13,7 +13,7 @@
 }
 
 .status .info {
-  background-color: #b7c2d4;
+  background-color: #91979e;
   border-radius: 0 0 10px 10px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -38,33 +38,59 @@
   cursor: pointer;
 }
 
-.modal {
+.modal.open .modal-menu {
+  -webkit-transform: translateY(200px);
+          transform: translateY(200px);
+  opacity: 1;
+  z-index: 1000;
+}
+
+.modal.open .modal-window {
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.modal.hide .modal-menu {
+  -webkit-transform: translateY(-1000px);
+          transform: translateY(-1000px);
+  opacity: 1;
+  z-index: 1000;
+}
+
+.modal.hide .modal-window {
+  background-color: rgba(0, 0, 0, 0);
+  z-index: 1000;
+}
+
+.modal.close .modal-menu {
+  -webkit-transform: translateY(-500px);
+          transform: translateY(-500px);
+  opacity: 0;
+  z-index: -1;
+}
+
+.modal.close .modal-window {
+  background-color: rgba(0, 0, 0, 0);
+  z-index: -1;
+}
+
+.modal .modal-window {
   position: fixed;
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  -webkit-transition: background-color 0.3s ease-in;
-  transition: background-color 0.3s ease-in;
-  z-index: -1;
-  opacity: 0;
-  overflow: hidden;
+  -webkit-transition: background-color 0.5s ease-in;
+  transition: background-color 0.5s ease-in;
 }
 
 .modal .modal-menu {
-  background: #b7c2d4;
+  background: #91979e;
   border-radius: 10px;
-  padding: 10px;
-  width: 300px;
   height: 450px;
+  width: 300px;
   margin: 0 auto;
-  -webkit-transform: translateY(200px);
-          transform: translateY(200px);
-  -webkit-transition: -webkit-transform 0.3s ease-in;
-  transition: -webkit-transform 0.3s ease-in;
-  transition: transform 0.3s ease-in;
-  transition: transform 0.3s ease-in, -webkit-transform 0.3s ease-in;
+  padding: 10px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -78,9 +104,10 @@
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  z-index: -1;
-  opacity: 0;
-  overflow: hidden;
+  -webkit-transition: -webkit-transform 0.5s ease-in;
+  transition: -webkit-transform 0.5s ease-in;
+  transition: transform 0.5s ease-in;
+  transition: transform 0.5s ease-in, -webkit-transform 0.5s ease-in;
 }
 
 .modal .modal-menu .pause {
@@ -111,13 +138,13 @@
   outline: none;
   border: 1px solid black;
   border-radius: 5px;
-  background: #9fa8b8;
+  background: #898f96;
   font-family: "Comfortaa";
   font-style: 2rem;
   cursor: pointer;
 }
 
 .modal .modal-menu .version {
-  color: #8a8a8a;
+  color: #636262;
 }
 /*# sourceMappingURL=stat.css.map */

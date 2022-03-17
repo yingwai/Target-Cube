@@ -6,7 +6,7 @@
     z-index: 2;
 
     .info {
-        background-color: rgb(183, 194, 212);
+        background-color: #91979e;
         border-radius: 0 0 10px 10px;
         display: flex;
         align-items: center;
@@ -34,33 +34,60 @@
 }
 
 .modal {
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    transition: background-color 0.3s ease-in;
-    z-index: -1;
-    opacity: 0;
-    overflow: hidden;
+    &.open .modal-menu {
+        transform: translateY(200px);
+        opacity: 1;
+        z-index: 1000;
+    }
+
+    &.open .modal-window {
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+    }
+
+    &.hide .modal-menu {
+        transform: translateY(-1000px);
+        opacity: 1;
+        z-index: 1000;
+    }
+
+    &.hide .modal-window {
+        background-color: rgba(0, 0, 0, 0);
+        z-index: 1000;
+    }
+
+    &.close .modal-menu {
+        transform: translateY(-500px);
+        opacity: 0;
+        z-index: -1;
+    }
+
+    &.close .modal-window {
+        background-color: rgba(0, 0, 0, 0);
+        z-index: -1;
+    }
+
+    .modal-window {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        transition: background-color 0.5s ease-in;
+    }
 
     .modal-menu {
-        background: rgb(183, 194, 212);
+        background: #91979e;
         border-radius: 10px;
-        padding: 10px;
-        width: 300px;
         height: 450px;
+        width: 300px;
         margin: 0 auto;
-        transform: translateY(200px);
-        transition: transform 0.3s ease-in;
+        padding: 10px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: space-between;
-        z-index: -1;
-        opacity: 0;
-        overflow: hidden;
+        transition: transform 0.5s ease-in;
 
         .pause {
             font-size: 1.5rem;
@@ -80,7 +107,7 @@
                 outline: none;
                 border: 1px solid black;
                 border-radius: 5px;
-                background: rgb(159, 168, 184);
+                background: #898f96;
                 font-family: "Comfortaa";
                 font-style: 2rem;
                 cursor: pointer;
@@ -88,7 +115,7 @@
         }
 
         .version {
-            color: rgb(138, 138, 138);
+            color: rgb(99, 98, 98);
         }
     }
 }

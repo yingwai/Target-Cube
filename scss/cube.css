@@ -32,39 +32,47 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  background-image: repeating-linear-gradient(0deg, #686a77 0px, #686a77 1px, transparent 1px, transparent 21px), repeating-linear-gradient(90deg, #686a77 0px, #686a77 1px, transparent 1px, transparent 21px), -webkit-gradient(linear, left top, right top, from(#686a77), to(#686a77));
-  background-image: repeating-linear-gradient(0deg, #686a77 0px, #686a77 1px, transparent 1px, transparent 21px), repeating-linear-gradient(90deg, #686a77 0px, #686a77 1px, transparent 1px, transparent 21px), linear-gradient(90deg, #686a77, #686a77);
   border: 1px solid black;
 }
 
 .top {
   -webkit-transform: rotateX(90deg) translateZ(100px);
           transform: rotateX(90deg) translateZ(100px);
+  background-color: #E9ECEF;
 }
 
 .bottom {
   -webkit-transform: rotateX(-90deg) translateZ(100px);
           transform: rotateX(-90deg) translateZ(100px);
+  background-color: #E9ECEF;
 }
 
 .right {
   -webkit-transform: rotateY(90deg) translateZ(100px);
           transform: rotateY(90deg) translateZ(100px);
+  background: -webkit-gradient(linear, left top, left bottom, from(#E9ECEF));
+  background: linear-gradient(#E9ECEF);
 }
 
 .left {
   -webkit-transform: rotateY(-90deg) translateZ(100px);
           transform: rotateY(-90deg) translateZ(100px);
+  background: -webkit-gradient(linear, left top, left bottom, from(#E9ECEF));
+  background: linear-gradient(#E9ECEF);
 }
 
 .front {
   -webkit-transform: rotateX(0deg) translateZ(100px);
           transform: rotateX(0deg) translateZ(100px);
+  background: -webkit-gradient(linear, left top, left bottom, from(#E9ECEF));
+  background: linear-gradient(#E9ECEF);
 }
 
 .back {
   -webkit-transform: rotateX(-180deg) translateZ(100px);
           transform: rotateX(-180deg) translateZ(100px);
+  background: -webkit-gradient(linear, left top, left bottom, from(#E9ECEF));
+  background: linear-gradient(#E9ECEF);
 }
 
 @-webkit-keyframes spin {

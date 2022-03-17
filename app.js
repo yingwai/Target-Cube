@@ -10,15 +10,12 @@ let modal = document.querySelector('.modal')
 let modalMenu = document.querySelector('.modal-menu')
 let gearBtn = document.querySelectorAll('.gear-input')
 
+modal.classList.add('close')
+
 // Вызов окна настройки
 gear.addEventListener('click', () => {
-    modal.style.zIndex = '1000'
-    modal.style.opacity = '1'
-    modal.style.overflow = 'visible'
-
-    modalMenu.style.zIndex = '1000'
-    modalMenu.style.opacity = '1'
-    modalMenu.style.overflow = 'visible'
+    modal.classList.add('open')
+    modal.classList.remove('close')
 })
 
 // Кнопочки 57 строка
@@ -26,22 +23,15 @@ gear.addEventListener('click', () => {
 // Генератор меню
 menu.classList.add('close')
 
+
 // Открытие/закрытие меню
 menuimg.addEventListener('click', () => {
     if (menu.classList.contains('close')) {
         menu.classList.add('open')
         menu.classList.remove('close')
-
-        store.style.overflow = 'visible'
-        store.style.opacity = '1'
-        store.style.zIndex = '999'
     } else if (menu.classList.contains('open')) {
         menu.classList.add('close')
         menu.classList.remove('open')
-
-        store.style.overflow = 'hidden'
-        store.style.opacity = '0'
-        store.style.zIndex = '-1'
     }
 })
 
@@ -57,13 +47,13 @@ let sumInfo = `$0.00`
 for (let i = 0; i < gearBtn.length; i++) {
     gearBtn[i].addEventListener('click', () => {
         if (gearBtn[i].value === 'Продолжить') {
-            modal.style.zIndex = '-1'
-            modal.style.opacity = '0'
-            modal.style.overflow = 'hidden'
+            modal.classList.add('hide')
+            modal.classList.remove('open')
 
-            modalMenu.style.zIndex = '-1'
-            modalMenu.style.opacity = '0'
-            modalMenu.style.overflow = 'hidden'
+            setTimeout(() => {
+                modal.classList.remove('hide')
+                modal.classList.add('close')
+            }, 600);
         } else if (gearBtn[i].value === 'Настройки') {
             console.log('hi')
         } else if (gearBtn[i].value === 'Сбросить прогресс') {
@@ -73,15 +63,16 @@ for (let i = 0; i < gearBtn.length; i++) {
             if (confirmRemove === true) {
                 localStorage.removeItem('sumMoney')
                 sumMoney = 0
+
                 checkMoney()
 
-                modal.style.zIndex = '-1'
-                modal.style.opacity = '0'
-                modal.style.overflow = 'hidden'
+                modal.classList.add('hide')
+                modal.classList.remove('open')
 
-                modalMenu.style.zIndex = '-1'
-                modalMenu.style.opacity = '0'
-                modalMenu.style.overflow = 'hidden'
+                setTimeout(() => {
+                    modal.classList.remove('hide')
+                    modal.classList.add('close')
+                }, 600);
             }
 
         }
@@ -92,7 +83,7 @@ for (let i = 0; i < gearBtn.length; i++) {
 let dataSum = JSON.parse(localStorage.getItem('sumMoney'))
 
 // Создание или перезапись сохранённых денег при входе на страницу
-window.onload = function() {
+window.onload = function () {
     if (dataSum) {
         localStorage.setItem('sumMoney', JSON.stringify(dataSum))
         sumMoney = dataSum
@@ -103,12 +94,12 @@ window.onload = function() {
 }
 
 // Сохранение денег при выходе из страницы
-window.onunload = function() {
+window.onunload = function () {
     localStorage.setItem('sumMoney', JSON.stringify(dataSum))
 }
 
 // Рисование нижнего меню
-reborn.innerHTML = `Rebirth: 0`
+reborn.innerHTML = `Обнуление: 0`
 money.innerHTML = `${sumInfo}`
 
 // Количество получаемых денег
@@ -140,13 +131,11 @@ function checkMoney() {
     money.innerHTML = `${sumInfo}`
 }
 
-
-
 // Клик по кубу
 clickZone.addEventListener('click', () => {
     sumMoney += sumNum
 
-    
+
 
     checkMoney()
 })
@@ -157,23 +146,84 @@ function drawStoreList() {
                     <div class="title-store">
                         <h2>Магазин</h2>
                     </div>
-                    <div class="item" onclick="buy1(event)">
-                        <h3>Увеличение</h3>
-                        <p>${description___1}</p>
+                    
+                    <div class="selection-store">
+                        <input type="button" class="up active-selection" onclick="upStore(event)" value="Улучшения">
+                        <input type="button" class="boost" onclick="boostStore(event)" value="Бустеры">
+                    </div>
 
-                        <br>
+                    <div class="up-list-store">
+                        <div class="item" onclick="buy1(event)">
+                            <h3>Увеличение</h3>
+                            <p>${description___1}</p>
 
-                        <p>Цена: ${price___1} Уровень: ${level___1}</p>
+                            <br>
+
+                            <p>Цена: ${price___1} Уровень: ${level___1}</p>
+                        </div>
+                        
+                        <div class="item" onclick="buy2(event)">
+                            <h3>Автоклик</h3>
+                            <p>${description___2}</p>
+                            
+                            <br>
+                            
+                            <p>Цена: ${price___2} Уровень: ${level___2}</p>
+                        </div>
+
+                        <div class="item" onclick="buy3(event)">
+                            <h3>Увеличение автоклика</h3>
+                            <p>${description___3}</p>
+                            
+                            <br>
+                            
+                            <p>Цена: ${price___3} Уровень: ${level___3}</p>
+                        </div>      
+                        
+                        <div class="item" onclick="buy4(event)">
+                            <h3>Обнуление</h3>
+                            <p>${`Обнуляет весь прогресс, но увеличивает стандарнтые показатели.`}</p>
+                            
+                            <br>
+                            
+                            <p>Цена: ${''} Уровень: ${''}</p>
+                        </div>
+                    </div>`
+
+}
+
+// Рисование магазин листа
+function drawBoostList() {
+    store.innerHTML = `
+                    <div class="title-store">
+                        <h2>Магазин</h2>
                     </div>
                     
-                    <div class="item" onclick="buy2(event)">
-                        <h3>Автоклик</h3>
-                        <p>${description___2}</p>
-                        
-                        <br>
-                        
-                        <p>Цена: ${price___2} Уровень: ${level___2}</p>
+                    <div class="selection-store">
+                        <input type="button" class="up" onclick="upStore(event)" value="Улучшения">
+                        <input type="button" class="boost active-selection" onclick="boostStore(event)" value="Бустеры">
+                    </div>
+
+                    <div class="boost-list-store active">
+                        <div class="item" onclick="buy(event)">
+                            <h3>Увеличение количества денег за клик.</h3>
+                            <p>${''}</p>
+
+                            <br>
+
+                            <p>Цена: ${''}</p>
+                        </div>
                     </div>`
+}
+
+// Страница улучшений
+function upStore(event) {
+    drawStoreList()
+}
+
+// Страница бустеров
+function boostStore(event) {
+    drawBoostList()
 }
 
 // Увеличение
@@ -190,7 +240,7 @@ function buy1() {
             sumMoney -= price___1sum
             price___1sum = price___1sum + 1500
             price___1 = `$${price___1sum / 100}`
-            
+
             sumNum += 10
 
             checkMoney()
@@ -203,7 +253,7 @@ function buy1() {
         if (sumMoney >= price___1sum) {
             level___1++
             sumMoney -= price___1sum
-            price___1sum = price___1sum + 3000
+            price___1sum = price___1sum + 4000
             price___1 = `$${price___1sum / 100}`
             description___1 = 'Увеличивает количество получаемых денег за клик на 25.'
             sumNum += 25
@@ -218,7 +268,7 @@ function buy1() {
         if (sumMoney >= price___1sum) {
             level___1++
             sumMoney -= price___1sum
-            price___1sum = price___1sum + 4500
+            price___1sum = price___1sum + 7500
             price___1 = `$${price___1sum / 100}`
             description___1 = 'Увеличивает количество получаемых денег за клик на 40.'
             sumNum += 40
@@ -233,7 +283,7 @@ function buy1() {
         if (sumMoney >= price___1sum) {
             level___1++
             sumMoney -= price___1sum
-            price___1sum = price___1sum + 6000
+            price___1sum = price___1sum + 11000
             price___1 = `$${price___1sum / 100}`
             description___1 = 'Увеличивает количество получаемых денег за клик на 55.'
             sumNum += 55
@@ -248,7 +298,7 @@ function buy1() {
         if (sumMoney >= price___1sum) {
             level___1++
             sumMoney -= price___1sum
-            price___1sum = price___1sum + 7500
+            price___1sum = price___1sum + 16000
             price___1 = `$${price___1sum / 100}`
             description___1 = 'Увеличивает количество получаемых денег за клик на 70.'
             sumNum += 70
@@ -263,7 +313,7 @@ function buy1() {
         if (sumMoney >= price___1sum) {
             level___1++
             sumMoney -= price___1sum
-            price___1sum = price___1sum + 9000
+            price___1sum = price___1sum + 20000
             price___1 = `$${price___1sum / 100}`
             description___1 = 'Увеличивает количество получаемых денег за клик на 150.'
             sumNum += 150
@@ -278,7 +328,7 @@ function buy1() {
         if (sumMoney >= price___1sum) {
             level___1++
             sumMoney -= price___1sum
-            price___1sum = price___1sum + 13000
+            price___1sum = price___1sum + 26000
             price___1 = `$${price___1sum / 100}`
             description___1 = 'Увеличивает количество получаемых денег за клик на 200.'
             sumNum += 200
@@ -293,7 +343,7 @@ function buy1() {
         if (sumMoney >= price___1sum) {
             level___1++
             sumMoney -= price___1sum
-            price___1sum = price___1sum + 18000
+            price___1sum = price___1sum + 32000
             price___1 = `$${price___1sum / 100}`
             description___1 = 'Увеличивает количество получаемых денег за клик на 400.'
             sumNum += 400
@@ -308,7 +358,7 @@ function buy1() {
         if (sumMoney >= price___1sum) {
             level___1++
             sumMoney -= price___1sum
-            price___1sum = price___1sum + 21000
+            price___1sum = price___1sum + 39000
             price___1 = `$${price___1sum / 100}`
             description___1 = 'Увеличивает количество получаемых денег за клик на 650.'
             sumNum += 650
@@ -323,7 +373,7 @@ function buy1() {
         if (sumMoney >= price___1sum) {
             level___1++
             sumMoney -= price___1sum
-            price___1sum = price___1sum + 30000
+            price___1sum = price___1sum + 45000
             price___1 = `$${price___1sum / 100}`
             description___1 = 'Увеличивает количество получаемых денег за клик на 1500.'
             sumNum += 1500
@@ -354,12 +404,12 @@ function buy1() {
 }
 
 // Автоклик
-let price___2sum = 3000
+let price___2sum = 3500
 let price___2 = `$${price___2sum / 100}`
 let level___2 = 0
 let description___2 = `Автоматически получает ${sumLevel} за каждые 20 секунд.`
 
-let worker = [null, null, null, null, null, null, null, null, null]
+let worker = [null, null, null, null, null, null, null, null, null, null]
 
 // Покупака автоклика
 function buy2() {
@@ -367,18 +417,16 @@ function buy2() {
         if (sumMoney >= price___2sum) {
             level___2++
             sumMoney -= price___2sum
-            price___2sum = price___2sum + 3000
+            price___2sum = price___2sum + 3500
             price___2 = `$${price___2sum / 100}`
-            
-            
+
+
             if (level___2 === 1) {
                 checkLevelKill()
-            } else if (level___2 > 1) {
-                sumLevel += 5
             }
-            
+
             description___2 = `Автоматически получает ${sumLevel} за каждые 20 секунд.`
-            
+
             checkMoney()
 
             drawStoreList()
@@ -389,14 +437,12 @@ function buy2() {
         if (sumMoney >= price___2sum) {
             level___2++
             sumMoney -= price___2sum
-            price___2sum = price___2sum + 5000
+            price___2sum = price___2sum + 6000
             price___2 = `$${price___2sum / 100}`
-            
+
             if (level___2 === 11) {
                 clearInterval(worker[0])
                 checkLevelKill()
-            } else if (level___2 > 11) {
-                sumLevel += 10
             }
 
             description___2 = `Автоматически получает ${sumLevel} за каждые 18 секунд.`
@@ -411,14 +457,12 @@ function buy2() {
         if (sumMoney >= price___2sum) {
             level___2++
             sumMoney -= price___2sum
-            price___2sum = price___2sum + 8000
+            price___2sum = price___2sum + 10000
             price___2 = `$${price___2sum / 100}`
 
             if (level___2 === 21) {
                 clearInterval(worker[1])
                 checkLevelKill()
-            } else if (level___2 > 21) {
-                sumLevel += 15
             }
 
             description___2 = `Автоматически получает ${sumLevel} за каждые 16 секунд.`
@@ -433,14 +477,12 @@ function buy2() {
         if (sumMoney >= price___2sum) {
             level___2++
             sumMoney -= price___2sum
-            price___2sum = price___2sum + 10000
+            price___2sum = price___2sum + 15000
             price___2 = `$${price___2sum / 100}`
 
             if (level___2 === 31) {
                 clearInterval(worker[2])
                 checkLevelKill()
-            } else if (level___2 > 31) {
-                sumLevel += 20
             }
 
             description___2 = `Автоматически получает ${sumLevel} за каждые 14 секунд.`
@@ -455,14 +497,12 @@ function buy2() {
         if (sumMoney >= price___2sum) {
             level___2++
             sumMoney -= price___2sum
-            price___2sum = price___2sum + 12000
+            price___2sum = price___2sum + 20000
             price___2 = `$${price___2sum / 100}`
 
             if (level___2 === 41) {
                 clearInterval(worker[3])
                 checkLevelKill()
-            } else if (level___2 > 41) {
-                sumLevel += 25
             }
 
             description___2 = `Автоматически получает ${sumLevel} за каждые 12 секунд.`
@@ -477,14 +517,12 @@ function buy2() {
         if (sumMoney >= price___2sum) {
             level___2++
             sumMoney -= price___2sum
-            price___2sum = price___2sum + 15000
+            price___2sum = price___2sum + 27000
             price___2 = `$${price___2sum / 100}`
 
             if (level___2 === 51) {
                 clearInterval(worker[4])
                 checkLevelKill()
-            } else if (level___2 > 51) {
-                sumLevel += 30
             }
 
             description___2 = `Автоматически получает ${sumLevel} за каждые 10 секунд.`
@@ -499,17 +537,15 @@ function buy2() {
         if (sumMoney >= price___2sum) {
             level___2++
             sumMoney -= price___2sum
-            price___2sum = price___2sum + 17000
+            price___2sum = price___2sum + 33000
             price___2 = `$${price___2sum / 100}`
 
             if (level___2 === 61) {
                 clearInterval(worker[5])
                 checkLevelKill()
-            } else if (level___2 > 61) {
-                sumLevel += 35
             }
 
-            description___2 = `Автоматически получает ${sumLevel} за каждые 8 секунд.`
+            description___2 = `Автоматически получает ${sumLevel} за каждые 8 секунды.`
 
             checkMoney()
 
@@ -521,14 +557,12 @@ function buy2() {
         if (sumMoney >= price___2sum) {
             level___2++
             sumMoney -= price___2sum
-            price___2sum = price___2sum + 20000
+            price___2sum = price___2sum + 39000
             price___2 = `$${price___2sum / 100}`
 
             if (level___2 === 71) {
                 clearInterval(worker[6])
                 checkLevelKill()
-            } else if (level___2 > 71) {
-                sumLevel += 40
             }
 
             description___2 = `Автоматически получает ${sumLevel} за каждые 6 секунд.`
@@ -543,17 +577,15 @@ function buy2() {
         if (sumMoney >= price___2sum) {
             level___2++
             sumMoney -= price___2sum
-            price___2sum = price___2sum + 25000
+            price___2sum = price___2sum + 45000
             price___2 = `$${price___2sum / 100}`
 
             if (level___2 === 81) {
                 clearInterval(worker[7])
                 checkLevelKill()
-            } else if (level___2 > 81) {
-                sumLevel += 50
             }
 
-            description___2 = `Автоматически получает ${sumLevel} за каждые 4 секунд.`
+            description___2 = `Автоматически получает ${sumLevel} за каждые 4 секунды.`
 
             checkMoney()
 
@@ -565,14 +597,12 @@ function buy2() {
         if (sumMoney >= price___2sum) {
             level___2++
             sumMoney -= price___2sum
-            price___2sum = price___2sum + 20000
+            price___2sum = price___2sum + 60000
             price___2 = `$${price___2sum / 100}`
 
             if (level___2 === 91) {
                 clearInterval(worker[8])
                 checkLevelKill()
-            } else if (level___2 > 91) {
-                sumLevel += 60
             }
 
             description___2 = `Автоматически получает ${sumLevel} за каждые 2 секунд.`
@@ -589,9 +619,12 @@ function buy2() {
             sumMoney -= price___2sum
             price___2 = `Не продаётся`
 
-            if (level___2 > 99) {
-                sumLevel += 70
+            if (level___2 === 100) {
+                clearInterval(worker[9])
+                checkLevelKill()
             }
+
+            description___2 = `Автоматически получает ${sumLevel} за каждую 1 секунду.`
 
             checkMoney()
 
@@ -604,7 +637,7 @@ function buy2() {
     }
 }
 
-// Вызов автоклика или добавление к сумме автоклика
+// Вызов автоклика
 function checkLevelKill() {
     if (level___2 === 1) {
         function kill() {
@@ -676,6 +709,201 @@ function checkLevelKill() {
         }
 
         worker[9] = setInterval(kill, 2000)
+    } else if (level___2 === 100) {
+        function kill() {
+            checkMoney()
+            // console.log('1s')
+        }
+
+        worker[10] = setInterval(kill, 1000)
+    }
+}
+
+// Автоклик
+let price___3sum = 5700
+let price___3 = `$${price___3sum / 100}`
+let level___3 = 0
+let description___3 = `Добавляет ${sumLevel} к сумме автоклика`
+
+// Покупака увеличение автоклика
+function buy3() {
+    if (level___3 < 10) {
+        if (sumMoney >= price___3sum) {
+            level___3++
+            sumMoney -= price___3sum
+            price___3sum = price___3sum + 7500
+            price___3 = `$${price___3sum / 100}`
+            sumLevel += 5
+
+            description___3 = `Добавляет ${sumLevel} к сумме автоклика`
+
+            checkMoney()
+
+            drawStoreList()
+        } else {
+            alert('Нехватает денег.')
+        }
+    } else if (level___3 < 20) {
+        if (sumMoney >= price___3sum) {
+            level___3++
+            sumMoney -= price___3sum
+            price___3sum = price___3sum + 12000
+            price___3 = `$${price___3sum / 100}`
+            sumLevel += 10
+
+            description___3 = `Добавляет ${sumLevel} к сумме автоклика`
+
+            checkMoney()
+
+            drawStoreList()
+        } else {
+            alert('Нехватает денег.')
+        }
+    } else if (level___3 < 30) {
+        if (sumMoney >= price___3sum) {
+            level___3++
+            sumMoney -= price___3sum
+            price___3sum = price___3sum + 18000
+            price___3 = `$${price___3sum / 100}`
+            sumLevel += 15
+
+            description___3 = `Добавляет ${sumLevel} к сумме автоклика`
+
+            checkMoney()
+
+            drawStoreList()
+        } else {
+            alert('Нехватает денег.')
+        }
+    } else if (level___3 < 40) {
+        if (sumMoney >= price___3sum) {
+            level___3++
+            sumMoney -= price___3sum
+            price___3sum = price___3sum + 100000
+            price___3 = `$${price___3sum / 100}`
+            sumLevel += 20
+
+            description___3 = `Добавляет ${sumLevel} к сумме автоклика`
+
+            checkMoney()
+
+            drawStoreList()
+        } else {
+            alert('Нехватает денег.')
+        }
+    } else if (level___3 < 50) {
+        if (sumMoney >= price___3sum) {
+            level___3++
+            sumMoney -= price___3sum
+            price___3sum = price___3sum + 154000
+            price___3 = `$${price___3sum / 100}`
+            sumLevel += 25
+
+            description___3 = `Добавляет ${sumLevel} к сумме автоклика`
+
+            checkMoney()
+
+            drawStoreList()
+        } else {
+            alert('Нехватает денег.')
+        }
+    } else if (level___3 < 60) {
+        if (sumMoney >= price___3sum) {
+            level___3++
+            sumMoney -= price___3sum
+            price___3sum = price___3sum + 192000
+            price___3 = `$${price___3sum / 100}`
+            sumLevel += 30
+
+            description___3 = `Добавляет ${sumLevel} к сумме автоклика`
+
+            checkMoney()
+
+            drawStoreList()
+        } else {
+            alert('Нехватает денег.')
+        }
+    } else if (level___3 < 70) {
+        if (sumMoney >= price___3sum) {
+            level___3++
+            sumMoney -= price___3sum
+            price___3sum = price___3sum + 241500
+            price___3 = `$${price___3sum / 100}`
+            sumLevel += 35
+
+            description___3 = `Добавляет ${sumLevel} к сумме автоклика`
+
+            checkMoney()
+
+            drawStoreList()
+        } else {
+            alert('Нехватает денег.')
+        }
+    } else if (level___3 < 80) {
+        if (sumMoney >= price___3sum) {
+            level___3++
+            sumMoney -= price___3sum
+            price___3sum = price___3sum + 301000
+            price___3 = `$${price___3sum / 100}`
+            sumLevel += 40
+
+            description___3 = `Добавляет ${sumLevel} к сумме автоклика`
+
+            checkMoney()
+
+            drawStoreList()
+        } else {
+            alert('Нехватает денег.')
+        }
+    } else if (level___3 < 90) {
+        if (sumMoney >= price___3sum) {
+            level___3++
+            sumMoney -= price___3sum
+            price___3sum = price___3sum + 408000
+            price___3 = `$${price___3sum / 100}`
+            sumLevel += 50
+
+            description___3 = `Добавляет ${sumLevel} к сумме автоклика`
+
+            checkMoney()
+
+            drawStoreList()
+        } else {
+            alert('Нехватает денег.')
+        }
+    } else if (level___3 < 99) {
+        if (sumMoney >= price___3sum) {
+            level___3++
+            sumMoney -= price___3sum
+            price___3sum = price___3sum + 447300
+            price___3 = `$${price___3sum / 100}`
+            sumLevel += 60
+
+            description___3 = `Добавляет ${sumLevel} к сумме автоклика`
+
+            checkMoney()
+
+            drawStoreList()
+        } else {
+            alert('Нехватает денег.')
+        }
+    } else if (level___3 < 100) {
+        if (sumMoney >= price___3sum) {
+            level___3 = 'max'
+            sumMoney -= price___3sum
+            price___3 = `Не продаётся`
+            sumLevel += 85
+
+            description___3 = `Добавляет ${sumLevel} к сумме автоклика`
+
+            checkMoney()
+
+            drawStoreList()
+        } else {
+            alert('Нехватает денег.')
+        }
+    } else if (level___3 === 'max') {
+        alert('Максимальный уровень')
     }
 }
 

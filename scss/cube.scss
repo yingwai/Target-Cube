@@ -28,29 +28,34 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  background-image: repeating-linear-gradient(0deg, rgb(104, 106, 119) 0px, rgb(104, 106, 119) 1px,transparent 1px, transparent 21px),repeating-linear-gradient(90deg, rgb(104, 106, 119) 0px, rgb(104, 106, 119) 1px,transparent 1px, transparent 21px),linear-gradient(90deg, rgb(104, 106, 119),rgb(104, 106, 119));
   border: 1px solid black; 
 }
 
 .top {
   transform: rotateX(90deg) translateZ(100px);
+  background-color: #E9ECEF;
 }
 .bottom {
   transform: rotateX(-90deg) translateZ(100px);
+  background-color: #E9ECEF;
 }
 
 .right {
   transform: rotateY(90deg) translateZ(100px);
+  background: linear-gradient(#E9ECEF);
 }
 .left {
   transform: rotateY(-90deg) translateZ(100px);
+  background: linear-gradient(#E9ECEF);
 }
 
 .front {
   transform: rotateX(0deg) translateZ(100px);
+  background: linear-gradient(#E9ECEF);
 }
 .back {
   transform: rotateX(-180deg) translateZ(100px);
+  background: linear-gradient(#E9ECEF);
 }
 
 @keyframes spin {
