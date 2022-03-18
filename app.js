@@ -38,10 +38,13 @@ menuimg.addEventListener('click', () => {
 // Переменные нижнего меню
 let clickZone = document.querySelector('.clickzone')
 let reborn = document.querySelector('.reborn')
+let diamond = document.querySelector('.diamond')
 let money = document.querySelector('.money')
 
+// Переменные счёта денег и гемов
 let sumMoney = 0
 let sumInfo = `$0.00`
+let sumGems = 0
 
 // Кнопочки
 for (let i = 0; i < gearBtn.length; i++) {
@@ -81,29 +84,56 @@ for (let i = 0; i < gearBtn.length; i++) {
 
 // Получение сохранённых денег
 let dataSum = JSON.parse(localStorage.getItem('sumMoney'))
+let dataGems = JSON.parse(localStorage.getItem('sumGems'))
 
-// Создание или перезапись сохранённых денег при входе на страницу
-window.onload = function () {
+function loadMoney() {
     if (dataSum) {
         localStorage.setItem('sumMoney', JSON.stringify(dataSum))
         sumMoney = dataSum
-        checkMoney()
     } else {
         localStorage.setItem('sumMoney', JSON.stringify(sumMoney))
     }
 }
 
-// Сохранение денег при выходе из страницы
-window.onunload = function () {
+function saveMoney() {
     localStorage.setItem('sumMoney', JSON.stringify(dataSum))
 }
 
-// Рисование нижнего меню
+function loadGems() {
+    if (dataGems) {
+        localStorage.setItem('sumGems', JSON.stringify(dataGems))
+        sumGems = dataGems
+    } else {
+        localStorage.setItem('sumGems', JSON.stringify(sumGems))
+    }
+}
+
+function saveGems() {
+    localStorage.setItem('sumGems', JSON.stringify(dataGems))
+}
+
+// Создание или перезапись сохранённых денег при входе на страницу
+window.onload = function () {
+    loadMoney()
+    loadGems()
+    checkMoney()
+}
+
+// Сохранение денег при выходе из страницы
+window.onunload = function () {
+    saveMoney()
+    saveGems()
+}
+
+// Рисование средств
 reborn.innerHTML = `Обнуление: 0`
+diamond.innerHTML = `Гемы: ${sumGems}`
 money.innerHTML = `${sumInfo}`
 
+let sumBuff = 0
+
 // Количество получаемых денег
-let sumNum = 10
+let sumNum = 10 + sumBuff
 let sumLevel = 50
 
 // Рисование денег в зависимости от их количества
@@ -128,6 +158,10 @@ function checkMoney() {
 
     dataSum = sumMoney
 
+    dataGems = sumGems
+
+    reborn.innerHTML = `Обнуление: 0`
+    diamond.innerHTML = `Гемы: ${sumGems}`
     money.innerHTML = `${sumInfo}`
 }
 
@@ -135,10 +169,17 @@ function checkMoney() {
 clickZone.addEventListener('click', () => {
     sumMoney += sumNum
 
-
+    randomGiveMoney()
+    randomGiveGems()
 
     checkMoney()
 })
+
+// Блокировка навыка
+let lock1 = false
+let lock2 = false
+let lock3 = false
+let lock4 = false
 
 // Рисование магазин листа
 function drawStoreList() {
@@ -161,7 +202,21 @@ function drawStoreList() {
 
                             <p>Цена: ${price___1} Уровень: ${level___1}</p>
                         </div>
-                        
+
+                        <div class="item" onclick="buy5(event)">
+                            <h3>Критический клик</h3>
+                            <p>${description___5}</p>
+
+                            <br>
+
+                            <p>Цена: ${price___5} Уровень: ${level___5}</p>
+                            
+                            <div class="blocking">
+                                <img src="lock.png" alt="lock">
+                                <p>Для разблокировки необходим 10 ур. "Увеличение".</p>
+                            </div>
+                        </div>
+
                         <div class="item" onclick="buy2(event)">
                             <h3>Автоклик</h3>
                             <p>${description___2}</p>
@@ -169,6 +224,11 @@ function drawStoreList() {
                             <br>
                             
                             <p>Цена: ${price___2} Уровень: ${level___2}</p>
+
+                            <div class="blocking">
+                                <img src="lock.png" alt="lock">
+                                <p>Для разблокировки необходим 20 ур. "Увеличение".</p>
+                            </div>
                         </div>
 
                         <div class="item" onclick="buy3(event)">
@@ -178,18 +238,63 @@ function drawStoreList() {
                             <br>
                             
                             <p>Цена: ${price___3} Уровень: ${level___3}</p>
-                        </div>      
+
+                            <div class="blocking">
+                                <img src="lock.png" alt="lock">
+                                <p>Для разблокировки необходим 10 ур. "Автоклик".</p>
+                            </div>
+                        </div>    
                         
                         <div class="item" onclick="buy4(event)">
+                            <h3>Получение гемов</h3>
+                            <p>${description___4}</p>
+                            
+                            <br>
+                            
+                            <p>Цена: ${price___4} Уровень: ${level___4}</p>
+
+                            <div class="blocking">
+                                <img src="lock.png" alt="lock">
+                                <p>Для разблокировки необходим 35 ур. "Увеличение".</p>
+                            </div>
+                        </div>
+
+                        <div class="item" onclick="buy(event)">
                             <h3>Обнуление</h3>
                             <p>${`Обнуляет весь прогресс, но увеличивает стандарнтые показатели.`}</p>
                             
                             <br>
                             
                             <p>Цена: ${''} Уровень: ${''}</p>
+
+                            <div class="blocking">
+                                <img src="lock.png" alt="lock">
+                                <p></p>
+                            </div>
                         </div>
                     </div>`
 
+    let blockings = document.querySelectorAll('.blocking')
+
+    if (level___1 >= 10) {
+        blockings[0].classList.add('clear')
+        lock1 = true
+    }
+
+    if (level___1 >= 20) {
+        blockings[1].classList.add('clear')
+        lock2 = true
+    }
+
+    if (level___2 >= 10) {
+        blockings[2].classList.add('clear')
+        lock3 = true
+    }
+
+    if (level___1 >= 35) {
+        blockings[3].classList.add('clear')
+        lock4 = true
+    }
 }
 
 // Рисование магазин листа
@@ -205,13 +310,26 @@ function drawBoostList() {
                     </div>
 
                     <div class="boost-list-store active">
-                        <div class="item" onclick="buy(event)">
-                            <h3>Увеличение количества денег за клик.</h3>
-                            <p>${''}</p>
+                        <div class="item" onclick="rent1(event)">
+                            <h3>Увеличитель денег</h3>
+                            <p>Временно повышает количество получаемых денег за клик.</p>
 
                             <br>
 
-                            <p>Цена: ${''}</p>
+                            <p>Цена: ${price___rent1str}</p>
+
+                            <div class="active">
+                                <img src="clock.png" alt="clock">
+                            </div>
+                        </div>
+
+                        <div class="item" onclick="rent2(event)">
+                            <h3>Увеличитель гемов</h3>
+                            <p>Временно повышает количество получаемых гемов за клик.</p>
+
+                            <br>
+
+                            <p>Цена: ${price___rent2str}</p>
                         </div>
                     </div>`
 }
@@ -403,6 +521,236 @@ function buy1() {
     }
 }
 
+// Критический клик
+let price___5sum = 2780
+let price___5 = `$${price___5sum / 100}`
+let level___5 = 0
+let description___5 = 'Даёт шанс 2% на получение большего количества денег.'
+let moneyActive = false
+let critMoney = 400
+let perMoney = 0
+
+// Покупака критического клика
+function buy5() {
+    if (lock1 === true) {
+        if (level___5 < 10) {
+            if (sumMoney >= price___5sum) {
+                level___5++
+                sumMoney -= price___5sum
+                price___5sum = price___5sum + 3300
+                price___5 = `$${price___5sum / 100}`
+
+                if (level___5 === 1) {
+                    moneyActive = true
+                } else if (level___5 > 1) {
+                    critMoney += 200
+                } else if (level___5 === 10) {
+                    perMoney += 0.02
+                }
+
+                description___5 = 'Даёт шанс 4% на получение большего количества денег.'
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___5 < 20) {
+            if (sumMoney >= price___5sum) {
+                level___5++
+                sumMoney -= price___5sum
+                price___5sum = price___5sum + 4000
+                price___5 = `$${price___5sum / 100}`
+
+                description___5 = 'Даёт шанс 4% на получение большего количества денег.'
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___5 < 30) {
+            if (sumMoney >= price___5sum) {
+                level___5++
+                sumMoney -= price___5sum
+                price___5sum = price___5sum + 6400
+                price___5 = `$${price___5sum / 100}`
+
+                if (level___5 > 20) {
+                    critMoney += 200
+                } else if (level___5 === 30) {
+                    perMoney += 0.02
+                }
+
+                description___5 = 'Даёт шанс 6% на получение большего количества денег.'
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___5 < 40) {
+            if (sumMoney >= price___5sum) {
+                level___5++
+                sumMoney -= price___5sum
+                price___5sum = price___5sum + 9810
+                price___5 = `$${price___5sum / 100}`
+
+                description___5 = 'Даёт шанс 6% на получение большего количества денег.'
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___5 < 50) {
+            if (sumMoney >= price___5sum) {
+                level___5++
+                sumMoney -= price___5sum
+                price___5sum = price___5sum + 13290
+                price___5 = `$${price___5sum / 100}`
+
+                if (level___5 > 40) {
+                    critMoney += 200
+                } else if (level___5 === 50) {
+                    perMoney += 0.02
+                }
+
+                description___5 = 'Даёт шанс 8% на получение большего количества денег.'
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___5 < 60) {
+            if (sumMoney >= price___5sum) {
+                level___5++
+                sumMoney -= price___5sum
+                price___5sum = price___5sum + 19580
+                price___5 = `$${price___5sum / 100}`
+
+                description___5 = 'Даёт шанс 8% на получение большего количества денег.'
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___5 < 70) {
+            if (sumMoney >= price___5sum) {
+                level___5++
+                sumMoney -= price___5sum
+                price___5sum = price___5sum + 23710
+                price___5 = `$${price___5sum / 100}`
+
+                if (level___5 > 60) {
+                    critMoney += 200
+                } else if (level___5 === 70) {
+                    perMoney += 0.02
+                }
+
+                description___5 = 'Даёт шанс 10% на получение большего количества денег.'
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___5 < 80) {
+            if (sumMoney >= price___5sum) {
+                level___5++
+                sumMoney -= price___5sum
+                price___5sum = price___5sum + 28910
+                price___5 = `$${price___5sum / 100}`
+
+                description___5 = 'Даёт шанс 10% на получение большего количества денег.'
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___5 < 90) {
+            if (sumMoney >= price___5sum) {
+                level___5++
+                sumMoney -= price___5sum
+                price___5sum = price___5sum + 35910
+                price___5 = `$${price___5sum / 100}`
+
+                description___5 = 'Даёт шанс 10% на получение большего количества денег.'
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___5 < 99) {
+            if (sumMoney >= price___5sum) {
+                level___5++
+                sumMoney -= price___5sum
+                price___5sum = price___5sum + 42650
+                price___5 = `$${price___5sum / 100}`
+
+                description___5 = 'Даёт шанс 10% на получение большего количества денег.'
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___5 < 100) {
+            if (sumMoney >= price___5sum) {
+                level___5 = 'max'
+                sumMoney -= price___5sum
+                price___5 = `Не продаётся`
+
+                if (level___5 > 30) {
+                    critMoney += 200
+                    perMoney += 0.02
+                }
+
+                description___5 = 'Даёт шанс 12% на получение большего количества денег.'
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___5 === 'max') {
+            alert('Максимальный уровень')
+        }
+    }
+}
+
+// Получение гемов
+function randomGiveMoney() {
+    const r = Math.random();
+
+    if (moneyActive === true) {
+        // 1% выпадения гема
+        if (r <= 0.02 + perMoney) {
+            sumMoney += critMoney
+
+            checkMoney()
+
+            console.log('get')
+        }
+    }
+
+}
+
 // Автоклик
 let price___2sum = 3500
 let price___2 = `$${price___2sum / 100}`
@@ -413,227 +761,229 @@ let worker = [null, null, null, null, null, null, null, null, null, null]
 
 // Покупака автоклика
 function buy2() {
-    if (level___2 < 10) {
-        if (sumMoney >= price___2sum) {
-            level___2++
-            sumMoney -= price___2sum
-            price___2sum = price___2sum + 3500
-            price___2 = `$${price___2sum / 100}`
+    if (lock2 === true) {
+        if (level___2 < 10) {
+            if (sumMoney >= price___2sum) {
+                level___2++
+                sumMoney -= price___2sum
+                price___2sum = price___2sum + 3500
+                price___2 = `$${price___2sum / 100}`
 
 
-            if (level___2 === 1) {
-                checkLevelKill()
+                if (level___2 === 1) {
+                    checkLevelKill()
+                }
+
+                description___2 = `Автоматически получает ${sumLevel} за каждые 20 секунд.`
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
             }
+        } else if (level___2 < 20) {
+            if (sumMoney >= price___2sum) {
+                level___2++
+                sumMoney -= price___2sum
+                price___2sum = price___2sum + 6000
+                price___2 = `$${price___2sum / 100}`
 
-            description___2 = `Автоматически получает ${sumLevel} за каждые 20 секунд.`
+                if (level___2 === 11) {
+                    clearInterval(worker[0])
+                    checkLevelKill()
+                }
 
-            checkMoney()
+                description___2 = `Автоматически получает ${sumLevel} за каждые 18 секунд.`
 
-            drawStoreList()
-        } else {
-            alert('Нехватает денег.')
-        }
-    } else if (level___2 < 20) {
-        if (sumMoney >= price___2sum) {
-            level___2++
-            sumMoney -= price___2sum
-            price___2sum = price___2sum + 6000
-            price___2 = `$${price___2sum / 100}`
+                checkMoney()
 
-            if (level___2 === 11) {
-                clearInterval(worker[0])
-                checkLevelKill()
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
             }
+        } else if (level___2 < 30) {
+            if (sumMoney >= price___2sum) {
+                level___2++
+                sumMoney -= price___2sum
+                price___2sum = price___2sum + 10000
+                price___2 = `$${price___2sum / 100}`
 
-            description___2 = `Автоматически получает ${sumLevel} за каждые 18 секунд.`
+                if (level___2 === 21) {
+                    clearInterval(worker[1])
+                    checkLevelKill()
+                }
 
-            checkMoney()
+                description___2 = `Автоматически получает ${sumLevel} за каждые 16 секунд.`
 
-            drawStoreList()
-        } else {
-            alert('Нехватает денег.')
-        }
-    } else if (level___2 < 30) {
-        if (sumMoney >= price___2sum) {
-            level___2++
-            sumMoney -= price___2sum
-            price___2sum = price___2sum + 10000
-            price___2 = `$${price___2sum / 100}`
+                checkMoney()
 
-            if (level___2 === 21) {
-                clearInterval(worker[1])
-                checkLevelKill()
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
             }
+        } else if (level___2 < 40) {
+            if (sumMoney >= price___2sum) {
+                level___2++
+                sumMoney -= price___2sum
+                price___2sum = price___2sum + 15000
+                price___2 = `$${price___2sum / 100}`
 
-            description___2 = `Автоматически получает ${sumLevel} за каждые 16 секунд.`
+                if (level___2 === 31) {
+                    clearInterval(worker[2])
+                    checkLevelKill()
+                }
 
-            checkMoney()
+                description___2 = `Автоматически получает ${sumLevel} за каждые 14 секунд.`
 
-            drawStoreList()
-        } else {
-            alert('Нехватает денег.')
-        }
-    } else if (level___2 < 40) {
-        if (sumMoney >= price___2sum) {
-            level___2++
-            sumMoney -= price___2sum
-            price___2sum = price___2sum + 15000
-            price___2 = `$${price___2sum / 100}`
+                checkMoney()
 
-            if (level___2 === 31) {
-                clearInterval(worker[2])
-                checkLevelKill()
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
             }
+        } else if (level___2 < 50) {
+            if (sumMoney >= price___2sum) {
+                level___2++
+                sumMoney -= price___2sum
+                price___2sum = price___2sum + 20000
+                price___2 = `$${price___2sum / 100}`
 
-            description___2 = `Автоматически получает ${sumLevel} за каждые 14 секунд.`
+                if (level___2 === 41) {
+                    clearInterval(worker[3])
+                    checkLevelKill()
+                }
 
-            checkMoney()
+                description___2 = `Автоматически получает ${sumLevel} за каждые 12 секунд.`
 
-            drawStoreList()
-        } else {
-            alert('Нехватает денег.')
-        }
-    } else if (level___2 < 50) {
-        if (sumMoney >= price___2sum) {
-            level___2++
-            sumMoney -= price___2sum
-            price___2sum = price___2sum + 20000
-            price___2 = `$${price___2sum / 100}`
+                checkMoney()
 
-            if (level___2 === 41) {
-                clearInterval(worker[3])
-                checkLevelKill()
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
             }
+        } else if (level___2 < 60) {
+            if (sumMoney >= price___2sum) {
+                level___2++
+                sumMoney -= price___2sum
+                price___2sum = price___2sum + 27000
+                price___2 = `$${price___2sum / 100}`
 
-            description___2 = `Автоматически получает ${sumLevel} за каждые 12 секунд.`
+                if (level___2 === 51) {
+                    clearInterval(worker[4])
+                    checkLevelKill()
+                }
 
-            checkMoney()
+                description___2 = `Автоматически получает ${sumLevel} за каждые 10 секунд.`
 
-            drawStoreList()
-        } else {
-            alert('Нехватает денег.')
-        }
-    } else if (level___2 < 60) {
-        if (sumMoney >= price___2sum) {
-            level___2++
-            sumMoney -= price___2sum
-            price___2sum = price___2sum + 27000
-            price___2 = `$${price___2sum / 100}`
+                checkMoney()
 
-            if (level___2 === 51) {
-                clearInterval(worker[4])
-                checkLevelKill()
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
             }
+        } else if (level___2 < 70) {
+            if (sumMoney >= price___2sum) {
+                level___2++
+                sumMoney -= price___2sum
+                price___2sum = price___2sum + 33000
+                price___2 = `$${price___2sum / 100}`
 
-            description___2 = `Автоматически получает ${sumLevel} за каждые 10 секунд.`
+                if (level___2 === 61) {
+                    clearInterval(worker[5])
+                    checkLevelKill()
+                }
 
-            checkMoney()
+                description___2 = `Автоматически получает ${sumLevel} за каждые 8 секунды.`
 
-            drawStoreList()
-        } else {
-            alert('Нехватает денег.')
-        }
-    } else if (level___2 < 70) {
-        if (sumMoney >= price___2sum) {
-            level___2++
-            sumMoney -= price___2sum
-            price___2sum = price___2sum + 33000
-            price___2 = `$${price___2sum / 100}`
+                checkMoney()
 
-            if (level___2 === 61) {
-                clearInterval(worker[5])
-                checkLevelKill()
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
             }
+        } else if (level___2 < 80) {
+            if (sumMoney >= price___2sum) {
+                level___2++
+                sumMoney -= price___2sum
+                price___2sum = price___2sum + 39000
+                price___2 = `$${price___2sum / 100}`
 
-            description___2 = `Автоматически получает ${sumLevel} за каждые 8 секунды.`
+                if (level___2 === 71) {
+                    clearInterval(worker[6])
+                    checkLevelKill()
+                }
 
-            checkMoney()
+                description___2 = `Автоматически получает ${sumLevel} за каждые 6 секунд.`
 
-            drawStoreList()
-        } else {
-            alert('Нехватает денег.')
-        }
-    } else if (level___2 < 80) {
-        if (sumMoney >= price___2sum) {
-            level___2++
-            sumMoney -= price___2sum
-            price___2sum = price___2sum + 39000
-            price___2 = `$${price___2sum / 100}`
+                checkMoney()
 
-            if (level___2 === 71) {
-                clearInterval(worker[6])
-                checkLevelKill()
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
             }
+        } else if (level___2 < 90) {
+            if (sumMoney >= price___2sum) {
+                level___2++
+                sumMoney -= price___2sum
+                price___2sum = price___2sum + 45000
+                price___2 = `$${price___2sum / 100}`
 
-            description___2 = `Автоматически получает ${sumLevel} за каждые 6 секунд.`
+                if (level___2 === 81) {
+                    clearInterval(worker[7])
+                    checkLevelKill()
+                }
 
-            checkMoney()
+                description___2 = `Автоматически получает ${sumLevel} за каждые 4 секунды.`
 
-            drawStoreList()
-        } else {
-            alert('Нехватает денег.')
-        }
-    } else if (level___2 < 90) {
-        if (sumMoney >= price___2sum) {
-            level___2++
-            sumMoney -= price___2sum
-            price___2sum = price___2sum + 45000
-            price___2 = `$${price___2sum / 100}`
+                checkMoney()
 
-            if (level___2 === 81) {
-                clearInterval(worker[7])
-                checkLevelKill()
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
             }
+        } else if (level___2 < 99) {
+            if (sumMoney >= price___2sum) {
+                level___2++
+                sumMoney -= price___2sum
+                price___2sum = price___2sum + 60000
+                price___2 = `$${price___2sum / 100}`
 
-            description___2 = `Автоматически получает ${sumLevel} за каждые 4 секунды.`
+                if (level___2 === 91) {
+                    clearInterval(worker[8])
+                    checkLevelKill()
+                }
 
-            checkMoney()
+                description___2 = `Автоматически получает ${sumLevel} за каждые 2 секунд.`
 
-            drawStoreList()
-        } else {
-            alert('Нехватает денег.')
-        }
-    } else if (level___2 < 99) {
-        if (sumMoney >= price___2sum) {
-            level___2++
-            sumMoney -= price___2sum
-            price___2sum = price___2sum + 60000
-            price___2 = `$${price___2sum / 100}`
+                checkMoney()
 
-            if (level___2 === 91) {
-                clearInterval(worker[8])
-                checkLevelKill()
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
             }
+        } else if (level___2 < 100) {
+            if (sumMoney >= price___2sum) {
+                level___2 = 'max'
+                sumMoney -= price___2sum
+                price___2 = `Не продаётся`
 
-            description___2 = `Автоматически получает ${sumLevel} за каждые 2 секунд.`
+                if (level___2 === 100) {
+                    clearInterval(worker[9])
+                    checkLevelKill()
+                }
 
-            checkMoney()
+                description___2 = `Автоматически получает ${sumLevel} за каждую 1 секунду.`
 
-            drawStoreList()
-        } else {
-            alert('Нехватает денег.')
-        }
-    } else if (level___2 < 100) {
-        if (sumMoney >= price___2sum) {
-            level___2 = 'max'
-            sumMoney -= price___2sum
-            price___2 = `Не продаётся`
+                checkMoney()
 
-            if (level___2 === 100) {
-                clearInterval(worker[9])
-                checkLevelKill()
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
             }
-
-            description___2 = `Автоматически получает ${sumLevel} за каждую 1 секунду.`
-
-            checkMoney()
-
-            drawStoreList()
-        } else {
-            alert('Нехватает денег.')
+        } else if (level___2 === 'max') {
+            alert('Максимальный уровень')
         }
-    } else if (level___2 === 'max') {
-        alert('Максимальный уровень')
     }
 }
 
@@ -719,191 +1069,475 @@ function checkLevelKill() {
     }
 }
 
-// Автоклик
+// Увеличение автоклик
 let price___3sum = 5700
 let price___3 = `$${price___3sum / 100}`
 let level___3 = 0
-let description___3 = `Добавляет ${sumLevel} к сумме автоклика`
+let description___3 = `Добавляет ${sumLevel} к сумме автоклика.`
 
 // Покупака увеличение автоклика
 function buy3() {
-    if (level___3 < 10) {
-        if (sumMoney >= price___3sum) {
-            level___3++
-            sumMoney -= price___3sum
-            price___3sum = price___3sum + 7500
-            price___3 = `$${price___3sum / 100}`
-            sumLevel += 5
+    if (lock3 === true) {
+        if (level___3 < 10) {
+            if (sumMoney >= price___3sum) {
+                level___3++
+                sumMoney -= price___3sum
+                price___3sum = price___3sum + 7500
+                price___3 = `$${price___3sum / 100}`
+                sumLevel += 5
 
-            description___3 = `Добавляет ${sumLevel} к сумме автоклика`
+                description___3 = `Добавляет ${sumLevel} к сумме автоклика.`
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___3 < 20) {
+            if (sumMoney >= price___3sum) {
+                level___3++
+                sumMoney -= price___3sum
+                price___3sum = price___3sum + 12000
+                price___3 = `$${price___3sum / 100}`
+                sumLevel += 10
+
+                description___3 = `Добавляет ${sumLevel} к сумме автоклика.`
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___3 < 30) {
+            if (sumMoney >= price___3sum) {
+                level___3++
+                sumMoney -= price___3sum
+                price___3sum = price___3sum + 18000
+                price___3 = `$${price___3sum / 100}`
+                sumLevel += 15
+
+                description___3 = `Добавляет ${sumLevel} к сумме автоклика.`
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___3 < 40) {
+            if (sumMoney >= price___3sum) {
+                level___3++
+                sumMoney -= price___3sum
+                price___3sum = price___3sum + 100000
+                price___3 = `$${price___3sum / 100}`
+                sumLevel += 20
+
+                description___3 = `Добавляет ${sumLevel} к сумме автоклика.`
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___3 < 50) {
+            if (sumMoney >= price___3sum) {
+                level___3++
+                sumMoney -= price___3sum
+                price___3sum = price___3sum + 154000
+                price___3 = `$${price___3sum / 100}`
+                sumLevel += 25
+
+                description___3 = `Добавляет ${sumLevel} к сумме автоклика.`
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___3 < 60) {
+            if (sumMoney >= price___3sum) {
+                level___3++
+                sumMoney -= price___3sum
+                price___3sum = price___3sum + 192000
+                price___3 = `$${price___3sum / 100}`
+                sumLevel += 30
+
+                description___3 = `Добавляет ${sumLevel} к сумме автоклика.`
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___3 < 70) {
+            if (sumMoney >= price___3sum) {
+                level___3++
+                sumMoney -= price___3sum
+                price___3sum = price___3sum + 241500
+                price___3 = `$${price___3sum / 100}`
+                sumLevel += 35
+
+                description___3 = `Добавляет ${sumLevel} к сумме автоклика.`
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___3 < 80) {
+            if (sumMoney >= price___3sum) {
+                level___3++
+                sumMoney -= price___3sum
+                price___3sum = price___3sum + 301000
+                price___3 = `$${price___3sum / 100}`
+                sumLevel += 40
+
+                description___3 = `Добавляет ${sumLevel} к сумме автоклика.`
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___3 < 90) {
+            if (sumMoney >= price___3sum) {
+                level___3++
+                sumMoney -= price___3sum
+                price___3sum = price___3sum + 408000
+                price___3 = `$${price___3sum / 100}`
+                sumLevel += 50
+
+                description___3 = `Добавляет ${sumLevel} к сумме автоклика.`
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___3 < 99) {
+            if (sumMoney >= price___3sum) {
+                level___3++
+                sumMoney -= price___3sum
+                price___3sum = price___3sum + 447300
+                price___3 = `$${price___3sum / 100}`
+                sumLevel += 60
+
+                description___3 = `Добавляет ${sumLevel} к сумме автоклика.`
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___3 < 100) {
+            if (sumMoney >= price___3sum) {
+                level___3 = 'max'
+                sumMoney -= price___3sum
+                price___3 = `Не продаётся`
+                sumLevel += 85
+
+                description___3 = `Добавляет ${sumLevel} к сумме автоклика.`
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___3 === 'max') {
+            alert('Максимальный уровень')
+        }
+    }
+}
+
+// Увеличение автоклик
+let price___4sum = 9300
+let price___4 = `$${price___4sum / 100}`
+let level___4 = 0
+let description___4 = `Даёт 1% возможность получить гемы.`
+let gemsActive = false
+let perGems = 0
+let moreGems = 0
+
+function buy4() {
+    if (lock4 === true) {
+        if (level___4 < 10) {
+            if (sumMoney >= price___4sum) {
+                level___4++
+                sumMoney -= price___4sum
+                price___4sum = price___4sum + 10500
+                price___4 = `$${price___4sum / 100}`
+
+                if (level___4 === 1) {
+                    gemsActive = true
+                } else if (level___4 === 10) {
+                    moreGems = 1
+                }
+
+                description___4 = `Даёт 1% возможность получить гемы.`
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___4 < 20) {
+            if (sumMoney >= price___4sum) {
+                level___4++
+                sumMoney -= price___4sum
+                price___4sum = price___4sum + 15000
+                price___4 = `$${price___4sum / 100}`
+
+                if (level___4 === 20) {
+                    perGems = 0.01
+                }
+
+                description___4 = `Даёт 2% возможность получить гемы.`
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___4 < 30) {
+            if (sumMoney >= price___4sum) {
+                level___4++
+                sumMoney -= price___4sum
+                price___4sum = price___4sum + 21000
+                price___4 = `$${price___4sum / 100}`
+
+                if (level___4 === 30) {
+                    moreGems = 2
+                }
+
+                description___4 = `Даёт 2% возможность получить гемы.`
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___4 < 40) {
+            if (sumMoney >= price___4sum) {
+                level___4++
+                sumMoney -= price___4sum
+                price___4sum = price___4sum + 100000
+                price___4 = `$${price___4sum / 100}`
+
+                if (level___4 === 40) {
+                    perGems = 0.04
+                }
+
+                description___4 = `Даёт 5% возможность получить гемы.`
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___4 < 50) {
+            if (sumMoney >= price___4sum) {
+                level___4++
+                sumMoney -= price___4sum
+                price___4sum = price___4sum + 154000
+                price___4 = `$${price___4sum / 100}`
+
+                if (level___4 === 50) {
+                    moreGems = 3
+                }
+
+                description___4 = `Даёт 5% возможность получить гемы.`
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___4 < 60) {
+            if (sumMoney >= price___4sum) {
+                level___4++
+                sumMoney -= price___4sum
+                price___4sum = price___4sum + 192000
+                price___4 = `$${price___4sum / 100}`
+
+                if (level___4 === 60) {
+                    perGems = 0.07
+                }
+
+                description___4 = `Даёт 8% возможность получить гемы.`
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___4 < 70) {
+            if (sumMoney >= price___4sum) {
+                level___4++
+                sumMoney -= price___4sum
+                price___4sum = price___4sum + 241500
+                price___4 = `$${price___4sum / 100}`
+
+                if (level___4 === 70) {
+                    moreGems = 4
+                }
+
+                description___4 = `Даёт 8% возможность получить гемы.`
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___4 < 80) {
+            if (sumMoney >= price___4sum) {
+                level___4++
+                sumMoney -= price___4sum
+                price___4sum = price___4sum + 301000
+                price___4 = `$${price___4sum / 100}`
+
+                if (level___4 === 80) {
+                    perGems = 0.09
+                }
+
+                description___4 = `Даёт 10% возможность получить гемы.`
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___4 < 90) {
+            if (sumMoney >= price___4sum) {
+                level___4++
+                sumMoney -= price___4sum
+                price___4sum = price___4sum + 408000
+                price___4 = `$${price___4sum / 100}`
+
+                if (level___4 === 90) {
+                    moreGems = 5
+                }
+
+                description___4 = `Даёт 10% возможность получить гемы.`
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___4 < 99) {
+            if (sumMoney >= price___4sum) {
+                level___4++
+                sumMoney -= price___4sum
+                price___4sum = price___4sum + 470300
+                price___4 = `$${price___4sum / 100}`
+
+                description___4 = `Даёт 10% возможность получить гемы.`
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___4 < 100) {
+            if (sumMoney >= price___4sum) {
+                level___4 = 'max'
+                sumMoney -= price___4sum
+                price___4 = `Не продаётся`
+
+                if (level___4 === 100) {
+                    perGems = 0.14
+                }
+
+                description___4 = `Даёт 15% возможность получить гемы.`
+
+                checkMoney()
+
+                drawStoreList()
+            } else {
+                alert('Нехватает денег.')
+            }
+        } else if (level___4 === 'max') {
+            alert('Максимальный уровень')
+        }
+    }
+}
+
+// Получение гемов
+function randomGiveGems() {
+    const r = Math.random();
+
+    if (gemsActive === false) {
+        // 1% выпадения гема
+        if (r <= 1.01 + perGems) {
+            sumGems += 1 + moreGems
 
             checkMoney()
-
-            drawStoreList()
-        } else {
-            alert('Нехватает денег.')
         }
-    } else if (level___3 < 20) {
-        if (sumMoney >= price___3sum) {
-            level___3++
-            sumMoney -= price___3sum
-            price___3sum = price___3sum + 12000
-            price___3 = `$${price___3sum / 100}`
-            sumLevel += 10
+    }
 
-            description___3 = `Добавляет ${sumLevel} к сумме автоклика`
+}
 
-            checkMoney()
+// Увеличение деньжат
+let price___rent1 = 10
+let price___rent1str = `${price___rent1} гемов.`
 
-            drawStoreList()
-        } else {
-            alert('Нехватает денег.')
-        }
-    } else if (level___3 < 30) {
-        if (sumMoney >= price___3sum) {
-            level___3++
-            sumMoney -= price___3sum
-            price___3sum = price___3sum + 18000
-            price___3 = `$${price___3sum / 100}`
-            sumLevel += 15
+function rent1(event) {
+    if (sumGems >= price___rent1) {
+        sumGems -= price___rent1
 
-            description___3 = `Добавляет ${sumLevel} к сумме автоклика`
+        sumNum += 500
 
-            checkMoney()
+        setTimeout(() => {
+            sumNum -= 500
+        }, 10000);
 
-            drawStoreList()
-        } else {
-            alert('Нехватает денег.')
-        }
-    } else if (level___3 < 40) {
-        if (sumMoney >= price___3sum) {
-            level___3++
-            sumMoney -= price___3sum
-            price___3sum = price___3sum + 100000
-            price___3 = `$${price___3sum / 100}`
-            sumLevel += 20
+        checkMoney()
 
-            description___3 = `Добавляет ${sumLevel} к сумме автоклика`
+        drawBoostList()
+    } else {
+        alert('Нехватает денег.')
+    }
+}
 
-            checkMoney()
+// Увеличение гномов
+let price___rent2 = 20
+let price___rent2str = `${price___rent2} гемов.`
 
-            drawStoreList()
-        } else {
-            alert('Нехватает денег.')
-        }
-    } else if (level___3 < 50) {
-        if (sumMoney >= price___3sum) {
-            level___3++
-            sumMoney -= price___3sum
-            price___3sum = price___3sum + 154000
-            price___3 = `$${price___3sum / 100}`
-            sumLevel += 25
+function rent2(event) {
+    if (sumGems >= price___rent2) {
+        sumGems -= price___rent2
 
-            description___3 = `Добавляет ${sumLevel} к сумме автоклика`
+        moreGems += 3
 
-            checkMoney()
+        setTimeout(() => {
+            moreGems -= 3
+        }, 10000);
 
-            drawStoreList()
-        } else {
-            alert('Нехватает денег.')
-        }
-    } else if (level___3 < 60) {
-        if (sumMoney >= price___3sum) {
-            level___3++
-            sumMoney -= price___3sum
-            price___3sum = price___3sum + 192000
-            price___3 = `$${price___3sum / 100}`
-            sumLevel += 30
+        checkMoney()
 
-            description___3 = `Добавляет ${sumLevel} к сумме автоклика`
-
-            checkMoney()
-
-            drawStoreList()
-        } else {
-            alert('Нехватает денег.')
-        }
-    } else if (level___3 < 70) {
-        if (sumMoney >= price___3sum) {
-            level___3++
-            sumMoney -= price___3sum
-            price___3sum = price___3sum + 241500
-            price___3 = `$${price___3sum / 100}`
-            sumLevel += 35
-
-            description___3 = `Добавляет ${sumLevel} к сумме автоклика`
-
-            checkMoney()
-
-            drawStoreList()
-        } else {
-            alert('Нехватает денег.')
-        }
-    } else if (level___3 < 80) {
-        if (sumMoney >= price___3sum) {
-            level___3++
-            sumMoney -= price___3sum
-            price___3sum = price___3sum + 301000
-            price___3 = `$${price___3sum / 100}`
-            sumLevel += 40
-
-            description___3 = `Добавляет ${sumLevel} к сумме автоклика`
-
-            checkMoney()
-
-            drawStoreList()
-        } else {
-            alert('Нехватает денег.')
-        }
-    } else if (level___3 < 90) {
-        if (sumMoney >= price___3sum) {
-            level___3++
-            sumMoney -= price___3sum
-            price___3sum = price___3sum + 408000
-            price___3 = `$${price___3sum / 100}`
-            sumLevel += 50
-
-            description___3 = `Добавляет ${sumLevel} к сумме автоклика`
-
-            checkMoney()
-
-            drawStoreList()
-        } else {
-            alert('Нехватает денег.')
-        }
-    } else if (level___3 < 99) {
-        if (sumMoney >= price___3sum) {
-            level___3++
-            sumMoney -= price___3sum
-            price___3sum = price___3sum + 447300
-            price___3 = `$${price___3sum / 100}`
-            sumLevel += 60
-
-            description___3 = `Добавляет ${sumLevel} к сумме автоклика`
-
-            checkMoney()
-
-            drawStoreList()
-        } else {
-            alert('Нехватает денег.')
-        }
-    } else if (level___3 < 100) {
-        if (sumMoney >= price___3sum) {
-            level___3 = 'max'
-            sumMoney -= price___3sum
-            price___3 = `Не продаётся`
-            sumLevel += 85
-
-            description___3 = `Добавляет ${sumLevel} к сумме автоклика`
-
-            checkMoney()
-
-            drawStoreList()
-        } else {
-            alert('Нехватает денег.')
-        }
-    } else if (level___3 === 'max') {
-        alert('Максимальный уровень')
+        drawBoostList()
+    } else {
+        alert('Нехватает денег.')
     }
 }
 
