@@ -13,6 +13,7 @@
         justify-content: space-between;
         padding: 10px;
         width: 80%;
+        text-align: center;
 
         // .reborn {
 
@@ -20,6 +21,16 @@
 
         .diamond {
             margin-right: 30px;
+        }
+
+        @media (max-width: 395px) {
+            .reborn {
+                margin-right: 10px;
+            }
+
+            .diamond {
+            margin-right: 20px;
+            }
         }
 
         // .money {

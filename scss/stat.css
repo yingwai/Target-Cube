@@ -26,10 +26,20 @@
           justify-content: space-between;
   padding: 10px;
   width: 80%;
+  text-align: center;
 }
 
 .status .info .diamond {
   margin-right: 30px;
+}
+
+@media (max-width: 395px) {
+  .status .info .reborn {
+    margin-right: 10px;
+  }
+  .status .info .diamond {
+    margin-right: 20px;
+  }
 }
 
 .status .info img {

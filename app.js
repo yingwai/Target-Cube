@@ -66,6 +66,7 @@ for (let i = 0; i < gearBtn.length; i++) {
             if (confirmRemove === true) {
                 localStorage.removeItem('sumMoney')
                 sumMoney = 0
+                sumGems = 0
 
                 checkMoney()
 
@@ -133,7 +134,7 @@ money.innerHTML = `${sumInfo}`
 let sumBuff = 0
 
 // Количество получаемых денег
-let sumNum = 10 + sumBuff
+let sumNum = 1000000000 + sumBuff
 let sumLevel = 50
 
 // Рисование денег в зависимости от их количества
@@ -172,14 +173,12 @@ clickZone.addEventListener('click', () => {
     randomGiveMoney()
     randomGiveGems()
 
+    speedCube()
+
     checkMoney()
 })
 
-// Блокировка навыка
-let lock1 = false
-let lock2 = false
-let lock3 = false
-let lock4 = false
+let items
 
 // Рисование магазин листа
 function drawStoreList() {
@@ -195,68 +194,23 @@ function drawStoreList() {
 
                     <div class="up-list-store">
                         <div class="item" onclick="buy1(event)">
-                            <h3>Увеличение</h3>
-                            <p>${description___1}</p>
-
-                            <br>
-
-                            <p>Цена: ${price___1} Уровень: ${level___1}</p>
+                            
                         </div>
 
                         <div class="item" onclick="buy5(event)">
-                            <h3>Критический клик</h3>
-                            <p>${description___5}</p>
 
-                            <br>
-
-                            <p>Цена: ${price___5} Уровень: ${level___5}</p>
-                            
-                            <div class="blocking">
-                                <img src="lock.png" alt="lock">
-                                <p>Для разблокировки необходим 10 ур. "Увеличение".</p>
-                            </div>
                         </div>
 
                         <div class="item" onclick="buy2(event)">
-                            <h3>Автоклик</h3>
-                            <p>${description___2}</p>
                             
-                            <br>
-                            
-                            <p>Цена: ${price___2} Уровень: ${level___2}</p>
-
-                            <div class="blocking">
-                                <img src="lock.png" alt="lock">
-                                <p>Для разблокировки необходим 20 ур. "Увеличение".</p>
-                            </div>
                         </div>
 
                         <div class="item" onclick="buy3(event)">
-                            <h3>Увеличение автоклика</h3>
-                            <p>${description___3}</p>
-                            
-                            <br>
-                            
-                            <p>Цена: ${price___3} Уровень: ${level___3}</p>
-
-                            <div class="blocking">
-                                <img src="lock.png" alt="lock">
-                                <p>Для разблокировки необходим 10 ур. "Автоклик".</p>
-                            </div>
+                        
                         </div>    
                         
                         <div class="item" onclick="buy4(event)">
-                            <h3>Получение гемов</h3>
-                            <p>${description___4}</p>
                             
-                            <br>
-                            
-                            <p>Цена: ${price___4} Уровень: ${level___4}</p>
-
-                            <div class="blocking">
-                                <img src="lock.png" alt="lock">
-                                <p>Для разблокировки необходим 35 ур. "Увеличение".</p>
-                            </div>
                         </div>
 
                         <div class="item" onclick="buy(event)">
@@ -266,36 +220,187 @@ function drawStoreList() {
                             <br>
                             
                             <p>Цена: ${''} Уровень: ${''}</p>
-
-                            <div class="blocking">
-                                <img src="lock.png" alt="lock">
-                                <p></p>
-                            </div>
                         </div>
                     </div>`
 
-    let blockings = document.querySelectorAll('.blocking')
+    items = document.querySelectorAll('.item')
+    lockItemStore()
+}
 
-    if (level___1 >= 10) {
-        blockings[0].classList.add('clear')
-        lock1 = true
+let lock = {
+    lock1: false,
+    lock2: false,
+    lock3: false,
+    lock4: false,
+}
+
+function printItem() {
+    items[0].innerHTML = `
+                    <h3>Увеличение</h3>
+                    <p>${description___1}</p>
+
+                    <br>
+
+                    <p>Цена: ${price___1} Уровень: ${level___1}</p>`
+
+    if (level___1 < 10) {
+        items[1].innerHTML = `
+                            <h3>Критический клик</h3>
+                            <p>${description___5}</p>
+        
+                            <br>
+        
+                            <p>Цена: ${price___5} Уровень: ${level___5}</p>
+
+                            <div class="blocking">
+                                <img src="lock.png" alt="lock">
+                                <p>Для разблокировки необходим 10 ур. "Увеличение".</p>
+                            </div>`
+    } else {
+        items[1].innerHTML = `
+                        <h3>Критический клик</h3>
+                        <p>${description___5}</p>
+    
+                        <br>
+    
+                        <p>Цена: ${price___5} Уровень: ${level___5}</p>`
     }
 
-    if (level___1 >= 20) {
-        blockings[1].classList.add('clear')
-        lock2 = true
+    if (level___1 < 20) {
+        items[2].innerHTML = `
+                            <h3>Автоклик</h3>
+                            <p>${description___2}</p>
+                            
+                            <br>
+                            
+                            <p>Цена: ${price___2} Уровень: ${level___2}</p>
+
+                            <div class="blocking open">
+                                <img src="lock.png" alt="lock">
+                                <p>Для разблокировки необходим 20 ур. "Увеличение".</p>
+                            </div>`
+    } else {
+        items[2].innerHTML = `
+                            <h3>Автоклик</h3>
+                            <p>${description___2}</p>
+                            
+                            <br>
+                            
+                            <p>Цена: ${price___2} Уровень: ${level___2}</p>`
     }
 
-    if (level___2 >= 10) {
-        blockings[2].classList.add('clear')
-        lock3 = true
+    if (level___2 < 10) {
+        items[3].innerHTML = `
+                            <h3>Увеличение автоклика</h3>
+                            <p>${description___3}</p>
+                            
+                            <br>
+                            
+                            <p>Цена: ${price___3} Уровень: ${level___3}</p>
+
+                            <div class="blocking open">
+                                <img src="lock.png" alt="lock">
+                                <p>Для разблокировки необходим 10 ур. "Автоклик".</p>
+                            </div>`
+    } else {
+        items[3].innerHTML = `
+                            <h3>Увеличение автоклика</h3>
+                            <p>${description___3}</p>
+                            
+                            <br>
+                            
+                            <p>Цена: ${price___3} Уровень: ${level___3}</p>`
     }
 
-    if (level___1 >= 35) {
-        blockings[3].classList.add('clear')
-        lock4 = true
+    if (level___1 < 35) {
+        items[4].innerHTML = `
+                            <h3>Получение гемов</h3>
+                            <p>${description___4}</p>
+                            
+                            <br>
+                            
+                            <p>Цена: ${price___4} Уровень: ${level___4}</p>
+
+                            <div class="blocking open">
+                                <img src="lock.png" alt="lock">
+                                <p>Для разблокировки необходим 35 ур. "Увеличение".</p>
+                            </div>`
+    } else {
+        items[4].innerHTML = `
+                            <h3>Получение гемов</h3>
+                            <p>${description___4}</p>
+                            
+                            <br>
+                            
+                            <p>Цена: ${price___4} Уровень: ${level___4}</p>`
     }
 }
+
+// function printItem1() {
+//     if (level___1 < 10) {
+//         items[1].innerHTML = `
+//                             <h3>Критический клик</h3>
+//                             <p>${description___5}</p>
+
+//                             <br>
+
+//                             <p>Цена: ${price___5} Уровень: ${level___5}</p>
+
+//                             <div class="blocking">
+//                                 <img src="lock.png" alt="lock">
+//                                 <p>Для разблокировки необходим 10 ур. "Увеличение".</p>
+//                             </div>`
+//     } else {
+//         items[1].innerHTML = `
+//                         <h3>Критический клик</h3>
+//                         <p>${description___5}</p>
+
+//                         <br>
+
+//                         <p>Цена: ${price___5} Уровень: ${level___5}</p>
+
+//                         <div class="blocking close">
+//                                 <img src="lock.png" alt="lock">
+//                                 <p>Для разблокировки необходим 10 ур. "Увеличение".</p>
+//                             </div>`
+//     }
+// }
+
+function lockItemStore() {
+    // if (level___1 < 10) {
+    //     items[1].innerHTML += `
+    //                         <div class="blocking open">
+    //                             <img src="lock.png" alt="lock">
+    //                             <p>Для разблокировки необходим 10 ур. "Увеличение".</p>
+    //                         </div>`
+    // }
+
+    // if (level___1 < 20) {
+    //     items[2].innerHTML += `
+    //                         <div class="blocking open">
+    //                             <img src="lock.png" alt="lock">
+    //                             <p>Для разблокировки необходим 20 ур. "Увеличение".</p>
+    //                         </div>`
+    // }
+
+    // if (level___2 < 10) {
+    //     items[3].innerHTML += `
+    //                         <div class="blocking open">
+    //                             <img src="lock.png" alt="lock">
+    //                             <p>Для разблокировки необходим 10 ур. "Автоклик".</p>
+    //                         </div>`
+    // }
+
+    // if (level___1 < 35) {
+    //     items[4].innerHTML += `
+    //                         <div class="blocking open">
+    //                             <img src="lock.png" alt="lock">
+    //                             <p>Для разблокировки необходим 35 ур. "Увеличение".</p>
+    //                         </div>`
+    // }
+}
+
+let lockFunc = false
 
 // Рисование магазин листа
 function drawBoostList() {
@@ -309,7 +414,7 @@ function drawBoostList() {
                         <input type="button" class="boost active-selection" onclick="boostStore(event)" value="Бустеры">
                     </div>
 
-                    <div class="boost-list-store active">
+                    <div class="boost-list-store">
                         <div class="item" onclick="rent1(event)">
                             <h3>Увеличитель денег</h3>
                             <p>Временно повышает количество получаемых денег за клик.</p>
@@ -317,10 +422,6 @@ function drawBoostList() {
                             <br>
 
                             <p>Цена: ${price___rent1str}</p>
-
-                            <div class="active">
-                                <img src="clock.png" alt="clock">
-                            </div>
                         </div>
 
                         <div class="item" onclick="rent2(event)">
@@ -332,6 +433,180 @@ function drawBoostList() {
                             <p>Цена: ${price___rent2str}</p>
                         </div>
                     </div>`
+
+    items = document.querySelectorAll('.item')
+}
+
+clock = {
+    clock1: false,
+    clock2: false
+}
+
+lockClock = {
+    lock1: true,
+    lock2: true
+}
+
+function activeItemBoost1() {
+    time = 10
+    repeatBoostMin = 1
+    repeatBoostSec = 60
+    repeatSum = 120
+
+    items[0].innerHTML += `
+                    <div class="valid">
+                    </div>`
+
+    items[0].innerHTML += `
+                    <div class="blocking close">
+                    </div>`
+
+    let activePanels = document.querySelectorAll('.valid')
+    let blockings = document.querySelectorAll('.blocking')
+
+    activePanels[0].innerHTML += `
+            <img src="clock.png" alt="clock">
+            <p class="clock-time">Действует ещё 00.${time}.</p>`
+
+    let workerClock = null
+
+    workerClock = setInterval(decreaseTime, 1000)
+
+    function decreaseTime() {
+        if (time === 0) {
+            console.log('exit')
+
+            activePanels[0].innerHTML = ``
+
+            blockings[0].innerHTML = `
+                                <img src="lock.png" alt="lock">
+                                <p>До повторного применения осталось ${repeatBoostMin}.${repeatBoostSec}.</p>`
+
+            blockings[0].classList.remove('close')
+
+            if (repeatBoostMin === 0 && repeatSum === 0) {
+                blockings[0].classList.add('close')
+                activePanels[0].classList.add('close')
+
+                blockings[0].innerHTML = ``
+
+                lockClock.lock1 = true
+                lockFunc = false
+
+                clearInterval(workerClock)
+            } else {
+                let repeatCurrent = --repeatBoostSec
+                repeatSum--
+                console.log(repeatSum)
+
+                if (repeatCurrent < 10) {
+                    repeatCurrent = `0${repeatCurrent}`
+                }
+
+                if (repeatBoostSec === 0) {
+                    if (repeatBoostMin > 0) {
+                        repeatBoostMin--
+                    }
+                    repeatBoostSec = 60
+                }
+
+                blockings[0].innerHTML = `
+                                <img src="lock.png" alt="lock">
+                                <p>До повторного применения осталось ${repeatBoostMin}.${repeatCurrent}.</p>`
+            }
+        } else {
+            let current = --time
+
+            if (current < 10) {
+                current = `0${current}`
+            }
+
+            activePanels[0].innerHTML = `
+                    <img src="clock.png" alt="clock">
+                    <p class="clock-time">Действует ещё 00.${current}.</p>`
+        }
+    }
+}
+
+function activeItemBoost2() {
+    time = 10
+    repeatBoostMin = 1
+    repeatBoostSec = 60
+    repeatSum = 120
+
+    items[1].innerHTML += `
+                    <div class="valid">
+                    </div>`
+
+    items[1].innerHTML += `
+                    <div class="blocking close">
+                    </div>`
+
+    let activePanels = document.querySelectorAll('.valid')
+    let blockings = document.querySelectorAll('.blocking')
+
+    activePanels[0].innerHTML += `
+            <img src="clock.png" alt="clock">
+            <p class="clock-time">Действует ещё 00.${time}.</p>`
+
+    let workerClock2 = null
+
+    workerClock2 = setInterval(decreaseTime2, 1000)
+
+    function decreaseTime2() {
+        if (time === 0) {
+            console.log('exit')
+
+            activePanels[0].innerHTML = ``
+
+            blockings[0].innerHTML = `
+                                <img src="lock.png" alt="lock">
+                                <p>До повторного применения осталось ${repeatBoostMin}.${repeatBoostSec}.</p>`
+
+            blockings[0].classList.remove('close')
+
+            if (repeatBoostMin === 0 && repeatSum === 0) {
+                blockings[0].classList.add('close')
+                activePanels[0].classList.add('close')
+
+                blockings[0].innerHTML = ``
+
+                lockClock.lock1 = true
+                lockFunc = false
+
+                clearInterval(workerClock2)
+            } else {
+                let repeatCurrent = --repeatBoostSec
+                repeatSum--
+                console.log(repeatSum)
+
+                if (repeatCurrent < 10) {
+                    repeatCurrent = `0${repeatCurrent}`
+                }
+
+                if (repeatBoostSec === 0) {
+                    if (repeatBoostMin > 0) {
+                        repeatBoostMin--
+                    }
+                    repeatBoostSec = 60
+                }
+
+                blockings[0].innerHTML = `
+                                <img src="lock.png" alt="lock">
+                                <p>До повторного применения осталось ${repeatBoostMin}.${repeatCurrent}.</p>`
+            }
+        } else {
+            let current = --time
+
+            if (current < 10) {
+                current = `0${current}`
+            }
+
+            activePanels[0].innerHTML = `
+                    <img src="clock.png" alt="clock">
+                    <p class="clock-time">Действует ещё 00.${current}.</p>`
+        }
+    }
 }
 
 // Страница улучшений
@@ -361,9 +636,13 @@ function buy1() {
 
             sumNum += 10
 
+            if (level___1 >= 10) {
+                lock.lock1 = true
+            }
+
             checkMoney()
 
-            drawStoreList()
+            printItem()
         } else {
             alert('Нехватает денег.')
         }
@@ -376,9 +655,13 @@ function buy1() {
             description___1 = 'Увеличивает количество получаемых денег за клик на 25.'
             sumNum += 25
 
+            if (level___1 >= 20) {
+                lock.lock2 = true
+            }
+
             checkMoney()
 
-            drawStoreList()
+            printItem()
         } else {
             alert('Нехватает денег.')
         }
@@ -393,7 +676,7 @@ function buy1() {
 
             checkMoney()
 
-            drawStoreList()
+            printItem()
         } else {
             alert('Нехватает денег.')
         }
@@ -406,9 +689,13 @@ function buy1() {
             description___1 = 'Увеличивает количество получаемых денег за клик на 55.'
             sumNum += 55
 
+            if (level___1 >= 35) {
+                lock.lock4 = true
+            }
+
             checkMoney()
 
-            drawStoreList()
+            printItem()
         } else {
             alert('Нехватает денег.')
         }
@@ -423,7 +710,7 @@ function buy1() {
 
             checkMoney()
 
-            drawStoreList()
+            printItem()
         } else {
             alert('Нехватает денег.')
         }
@@ -438,7 +725,7 @@ function buy1() {
 
             checkMoney()
 
-            drawStoreList()
+            printItem()
         } else {
             alert('Нехватает денег.')
         }
@@ -453,7 +740,7 @@ function buy1() {
 
             checkMoney()
 
-            drawStoreList()
+            printItem()
         } else {
             alert('Нехватает денег.')
         }
@@ -468,7 +755,7 @@ function buy1() {
 
             checkMoney()
 
-            drawStoreList()
+            printItem()
         } else {
             alert('Нехватает денег.')
         }
@@ -483,7 +770,7 @@ function buy1() {
 
             checkMoney()
 
-            drawStoreList()
+            printItem()
         } else {
             alert('Нехватает денег.')
         }
@@ -498,7 +785,7 @@ function buy1() {
 
             checkMoney()
 
-            drawStoreList()
+            printItem()
         } else {
             alert('Нехватает денег.')
         }
@@ -512,7 +799,7 @@ function buy1() {
 
             checkMoney()
 
-            drawStoreList()
+            printItem()
         } else {
             alert('Нехватает денег.')
         }
@@ -532,7 +819,7 @@ let perMoney = 0
 
 // Покупака критического клика
 function buy5() {
-    if (lock1 === true) {
+    if (lock.lock1 === true) {
         if (level___5 < 10) {
             if (sumMoney >= price___5sum) {
                 level___5++
@@ -552,7 +839,7 @@ function buy5() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -567,7 +854,7 @@ function buy5() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -588,7 +875,7 @@ function buy5() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -603,7 +890,7 @@ function buy5() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -624,7 +911,7 @@ function buy5() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -639,7 +926,7 @@ function buy5() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -660,7 +947,7 @@ function buy5() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -675,7 +962,7 @@ function buy5() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -690,7 +977,7 @@ function buy5() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -705,7 +992,7 @@ function buy5() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -724,7 +1011,7 @@ function buy5() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -761,7 +1048,8 @@ let worker = [null, null, null, null, null, null, null, null, null, null]
 
 // Покупака автоклика
 function buy2() {
-    if (lock2 === true) {
+    if (lock.lock2 === true) {
+
         if (level___2 < 10) {
             if (sumMoney >= price___2sum) {
                 level___2++
@@ -769,16 +1057,19 @@ function buy2() {
                 price___2sum = price___2sum + 3500
                 price___2 = `$${price___2sum / 100}`
 
-
                 if (level___2 === 1) {
                     checkLevelKill()
+                }
+
+                if (level___2 === 10) {
+                    lock.lock3 = true
                 }
 
                 description___2 = `Автоматически получает ${sumLevel} за каждые 20 секунд.`
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -798,7 +1089,7 @@ function buy2() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -818,7 +1109,7 @@ function buy2() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -838,7 +1129,7 @@ function buy2() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -858,7 +1149,7 @@ function buy2() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -878,7 +1169,7 @@ function buy2() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -898,7 +1189,7 @@ function buy2() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -918,7 +1209,7 @@ function buy2() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -938,7 +1229,7 @@ function buy2() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -958,7 +1249,7 @@ function buy2() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -977,7 +1268,7 @@ function buy2() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -1077,7 +1368,7 @@ let description___3 = `Добавляет ${sumLevel} к сумме автокл
 
 // Покупака увеличение автоклика
 function buy3() {
-    if (lock3 === true) {
+    if (lock.lock3 === true) {
         if (level___3 < 10) {
             if (sumMoney >= price___3sum) {
                 level___3++
@@ -1090,7 +1381,7 @@ function buy3() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -1106,7 +1397,7 @@ function buy3() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -1122,7 +1413,7 @@ function buy3() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -1138,7 +1429,7 @@ function buy3() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -1154,7 +1445,7 @@ function buy3() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -1170,7 +1461,7 @@ function buy3() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -1186,7 +1477,7 @@ function buy3() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -1202,7 +1493,7 @@ function buy3() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -1218,7 +1509,7 @@ function buy3() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -1234,7 +1525,7 @@ function buy3() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -1249,7 +1540,7 @@ function buy3() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -1269,7 +1560,7 @@ let perGems = 0
 let moreGems = 0
 
 function buy4() {
-    if (lock4 === true) {
+    if (lock.lock4 === true) {
         if (level___4 < 10) {
             if (sumMoney >= price___4sum) {
                 level___4++
@@ -1287,7 +1578,7 @@ function buy4() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -1306,7 +1597,7 @@ function buy4() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -1325,7 +1616,7 @@ function buy4() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -1344,7 +1635,7 @@ function buy4() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -1363,7 +1654,7 @@ function buy4() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -1382,7 +1673,7 @@ function buy4() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -1401,7 +1692,7 @@ function buy4() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -1420,7 +1711,7 @@ function buy4() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -1439,7 +1730,7 @@ function buy4() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -1454,7 +1745,7 @@ function buy4() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -1472,7 +1763,7 @@ function buy4() {
 
                 checkMoney()
 
-                drawStoreList()
+                printItem()
             } else {
                 alert('Нехватает денег.')
             }
@@ -1502,20 +1793,27 @@ let price___rent1 = 10
 let price___rent1str = `${price___rent1} гемов.`
 
 function rent1(event) {
-    if (sumGems >= price___rent1) {
-        sumGems -= price___rent1
+    if (lockFunc === false) {
+        if (lockClock.lock1 === true) {
+            if (sumGems >= price___rent1) {
+                sumGems -= price___rent1
 
-        sumNum += 500
+                sumNum += 500
+                clock.clock1 = true
+                lockClock.lock1 = false
+                lockFunc = true
 
-        setTimeout(() => {
-            sumNum -= 500
-        }, 10000);
+                setTimeout(() => {
+                    sumNum -= 500
+                }, 10000);
 
-        checkMoney()
+                checkMoney()
 
-        drawBoostList()
-    } else {
-        alert('Нехватает денег.')
+                activeItemBoost1()
+            } else {
+                alert('Нехватает денег.')
+            }
+        }
     }
 }
 
@@ -1524,22 +1822,31 @@ let price___rent2 = 20
 let price___rent2str = `${price___rent2} гемов.`
 
 function rent2(event) {
-    if (sumGems >= price___rent2) {
-        sumGems -= price___rent2
+    if (lockFunc === false) {
+        if (lockClock.lock2 === true) {
+            if (sumGems >= price___rent2) {
+                sumGems -= price___rent2
 
-        moreGems += 3
+                moreGems += 3
+                clock.clock2 = true
+                lockClock.lock2 = false
+                lockFunc = true
 
-        setTimeout(() => {
-            moreGems -= 3
-        }, 10000);
+                setTimeout(() => {
+                    moreGems -= 3
+                }, 10000);
 
-        checkMoney()
+                checkMoney()
 
-        drawBoostList()
-    } else {
-        alert('Нехватает денег.')
+                activeItemBoost2()
+            } else {
+                alert('Нехватает денег.')
+            }
+        }
     }
 }
 
 // Добавление списка магазина
 drawStoreList()
+
+printItem()
