@@ -134,7 +134,7 @@ money.innerHTML = `${sumInfo}`
 let sumBuff = 0
 
 // Количество получаемых денег
-let sumNum = 1000000000 + sumBuff
+let sumNum = 10 + sumBuff
 let sumLevel = 50
 
 // Рисование денег в зависимости от их количества
@@ -172,8 +172,6 @@ clickZone.addEventListener('click', () => {
 
     randomGiveMoney()
     randomGiveGems()
-
-    speedCube()
 
     checkMoney()
 })
@@ -1777,9 +1775,9 @@ function buy4() {
 function randomGiveGems() {
     const r = Math.random();
 
-    if (gemsActive === false) {
+    if (gemsActive === true) {
         // 1% выпадения гема
-        if (r <= 1.01 + perGems) {
+        if (r <= 0.01 + perGems) {
             sumGems += 1 + moreGems
 
             checkMoney()
