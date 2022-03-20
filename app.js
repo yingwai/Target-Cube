@@ -222,7 +222,6 @@ function drawStoreList() {
                     </div>`
 
     items = document.querySelectorAll('.item')
-    lockItemStore()
 }
 
 let lock = {
