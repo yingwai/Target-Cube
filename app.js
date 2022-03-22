@@ -6431,4 +6431,4 @@ function checkLevelObj() {
 // Добавление списка магазина
 drawStoreList()
 
-printItem()
+printItem() 
