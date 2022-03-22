@@ -15,6 +15,12 @@
   margin: auto;
   -webkit-transition: all 1000s;
   transition: all 1000s;
+  -webkit-transform: translateX(0px);
+          transform: translateX(0px);
+  -webkit-transition: -webkit-transform 2s ease-in;
+  transition: -webkit-transform 2s ease-in;
+  transition: transform 2s ease-in;
+  transition: transform 2s ease-in, -webkit-transform 2s ease-in;
 }
 
 .cube {
@@ -24,8 +30,8 @@
   height: 100%;
   position: relative;
   cursor: pointer;
-  -webkit-animation: spin 200s infinite linear;
-          animation: spin 200s infinite linear;
+  -webkit-animation: spin 50s infinite linear;
+          animation: spin 50s infinite linear;
 }
 
 .face {
@@ -50,29 +56,29 @@
 .right {
   -webkit-transform: rotateY(90deg) translateZ(100px);
           transform: rotateY(90deg) translateZ(100px);
-  background: -webkit-gradient(linear, left top, left bottom, from(#E9ECEF));
-  background: linear-gradient(#E9ECEF);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(100%, #E9ECEF), to(#0096C7));
+  background: linear-gradient(#E9ECEF 100%, #0096C7);
 }
 
 .left {
   -webkit-transform: rotateY(-90deg) translateZ(100px);
           transform: rotateY(-90deg) translateZ(100px);
-  background: -webkit-gradient(linear, left top, left bottom, from(#E9ECEF));
-  background: linear-gradient(#E9ECEF);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(100%, #E9ECEF), to(#0096C7));
+  background: linear-gradient(#E9ECEF 100%, #0096C7);
 }
 
 .front {
   -webkit-transform: rotateX(0deg) translateZ(100px);
           transform: rotateX(0deg) translateZ(100px);
-  background: -webkit-gradient(linear, left top, left bottom, from(#E9ECEF));
-  background: linear-gradient(#E9ECEF);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(100%, #E9ECEF), to(#0096C7));
+  background: linear-gradient(#E9ECEF 100%, #0096C7);
 }
 
 .back {
   -webkit-transform: rotateX(-180deg) translateZ(100px);
           transform: rotateX(-180deg) translateZ(100px);
-  background: -webkit-gradient(linear, left top, left bottom, from(#E9ECEF));
-  background: linear-gradient(#E9ECEF);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(100%, #E9ECEF), to(#0096C7));
+  background: linear-gradient(#E9ECEF 100%, #0096C7);
 }
 
 @-webkit-keyframes spin {

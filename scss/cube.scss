@@ -13,6 +13,8 @@
   perspective: 1000px;
   margin: auto;
   transition: all 1000s;
+  transform: translateX(0px);
+  transition: transform 2s ease-in;
 }
 
 .cube {
@@ -21,7 +23,7 @@
   height: 100%;
   position: relative;
   cursor: pointer;
-  animation: spin 200s infinite linear;
+  animation: spin 50s infinite linear;
 }
 
 .face {
@@ -42,20 +44,21 @@
 
 .right {
   transform: rotateY(90deg) translateZ(100px);
-  background: linear-gradient(#E9ECEF);
+  background: linear-gradient(#E9ECEF 100%, #0096C7);
 }
 .left {
   transform: rotateY(-90deg) translateZ(100px);
-  background: linear-gradient(#E9ECEF);
+  background: linear-gradient(#E9ECEF 100%, #0096C7);
 }
 
 .front {
   transform: rotateX(0deg) translateZ(100px);
-  background: linear-gradient(#E9ECEF);
+  background: linear-gradient(#E9ECEF 100%, #0096C7);
 }
+
 .back {
   transform: rotateX(-180deg) translateZ(100px);
-  background: linear-gradient(#E9ECEF);
+  background: linear-gradient(#E9ECEF 100%, #0096C7);
 }
 
 @keyframes spin {
